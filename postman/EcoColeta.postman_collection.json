@@ -1,0 +1,128 @@
+{
+  "info": {
+    "name": "EcoColeta API",
+    "description": "Coleção para testar a EcoColeta API - Gestão de Resíduos e Reciclagem",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+  { "key": "baseUrl", "value": "http://localhost:8080" },
+  { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ecocoleta.com\",\n  \"senha\": \"Admin@123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/Auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "PontosColeta",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/PontosColeta?pagina=1&tamanhoPagina=10"
+          }
+        },
+        {
+          "name": "Criar (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"EcoPonto Teste\",\n  \"endereco\": \"Rua Teste, 10\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"São Paulo\",\n  \"latitude\": -23.55,\n  \"longitude\": -46.63,\n  \"tipoResiduoAceito\": 1,\n  \"capacidadeMaximaKg\": 500\n}"
+            },
+            "url": "{{baseUrl}}/api/PontosColeta"
+          }
+        }
+      ]
+    },
+    {
+      "name": "RegistrosResiduos",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/RegistrosResiduos"
+          }
+        },
+        {
+          "name": "Registrar (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pontoColetaId\": 1,\n  \"tipoResiduo\": 1,\n  \"pesoKg\": 50,\n  \"origem\": \"Comunidade Local\"\n}"
+            },
+            "url": "{{baseUrl}}/api/RegistrosResiduos"
+          }
+        }
+      ]
+    },
+    {
+      "name": "AlertasColeta",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/AlertasColeta"
+          }
+        },
+        {
+          "name": "Recalcular (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/AlertasColeta/recalcular"
+          }
+        }
+      ]
+    },
+    {
+      "name": "DestinacoesResiduos",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/DestinacoesResiduos"
+          }
+        }
+      ]
+    },
+    {
+      "name": "RelatoriosImpacto",
+      "item": [
+        {
+          "name": "Gerar Relatório",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/RelatoriosImpacto"
+          }
+        }
+      ]
+    }
+  ]
+}
