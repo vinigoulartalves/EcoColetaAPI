@@ -1,22 +1,26 @@
-using System.Net;
 using EcoColeta.Tests.Factories;
 
 namespace EcoColeta.Tests.Controllers;
 
-public class RelatoriosImpactoControllerTests : IClassFixture<EcoColetaWebApplicationFactory>
+public class RelatoriosImpactoControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public RelatoriosImpactoControllerTests(EcoColetaWebApplicationFactory factory)
+    public RelatoriosImpactoControllerTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }
 
     [Fact]
-    public async Task ObterResumo_DeveRetornarStatus200()
+    public async Task Get_ReturnsHttpStatusCode200()
     {
-        var response = await _client.GetAsync("/api/relatorios-impacto/resumo");
+        // Arrange
+        var request = "/api/relatorios-impacto/resumo";
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        // Act
+        var response = await _client.GetAsync(request);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
     }
 }

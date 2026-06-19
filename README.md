@@ -75,6 +75,32 @@ Parâmetros: `pagina` (padrão 1), `tamanhoPagina` (padrão 10, máx. 50).
 dotnet test
 ```
 
+**8 testes** com `CustomWebApplicationFactory` + EF Core InMemory:
+
+| Arquivo | Cenário |
+|---------|---------|
+| `PontosColetaControllerTests` | GET `/api/pontos-coleta` → 200 |
+| `RegistrosResiduosControllerTests` | GET `/api/registros-residuos` → 200 |
+| `AlertasColetaControllerTests` | GET `/api/alertas-coleta` → 200 |
+| `DestinacoesResiduosControllerTests` | GET `/api/destinacoes-residuos` → 200 |
+| `RelatoriosImpactoControllerTests` | GET `/api/relatorios-impacto/resumo` → 200 |
+| `AuthControllerTests` | Login retorna token; POST sem token → 401 |
+| `RegistrosResiduosAlertaTests` | Descarte > 80% gera alerta |
+
+## Postman
+
+Importe `postman/EcoColeta.postman_collection.json`.
+
+Variáveis: `baseUrl` (padrão `http://localhost:5261`) e `token` (preenchido automaticamente após Login).
+
+## Entrega (ZIP)
+
+Incluir apenas código-fonte. O `.gitignore` exclui `bin/`, `obj/`, `.vs/` e artefatos de build.
+
+```bash
+git archive --format=zip --output=EcoColeta-entrega.zip HEAD
+```
+
 ## Docker
 
 ```bash

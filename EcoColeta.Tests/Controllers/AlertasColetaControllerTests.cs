@@ -1,22 +1,26 @@
-using System.Net;
 using EcoColeta.Tests.Factories;
 
 namespace EcoColeta.Tests.Controllers;
 
-public class AlertasColetaControllerTests : IClassFixture<EcoColetaWebApplicationFactory>
+public class AlertasColetaControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public AlertasColetaControllerTests(EcoColetaWebApplicationFactory factory)
+    public AlertasColetaControllerTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }
 
     [Fact]
-    public async Task Listar_DeveRetornarStatus200()
+    public async Task Get_ReturnsHttpStatusCode200()
     {
-        var response = await _client.GetAsync("/api/alertas-coleta");
+        // Arrange
+        var request = "/api/alertas-coleta";
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        // Act
+        var response = await _client.GetAsync(request);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
     }
 }

@@ -8,15 +8,19 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace EcoColeta.Tests.Factories;
 
-public class EcoColetaWebApplicationFactory : WebApplicationFactory<Program>
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private readonly string _databaseName = $"EcoColetaTestDb_{Guid.NewGuid()}";
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseEnvironment("Development");
+
         builder.ConfigureServices(services =>
         {
             services.RemoveAll(typeof(DbContextOptions<AppDbContext>));
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase("EcoColetaTestDb"));
+                options.UseInMemoryDatabase(_databaseName));
 
             var sp = services.BuildServiceProvider();
             using var scope = sp.CreateScope();

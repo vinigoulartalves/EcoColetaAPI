@@ -1,11 +1,11 @@
 {
   "info": {
     "name": "EcoColeta API",
-    "description": "Coleção para testar a EcoColeta API - Gestão de Resíduos e Reciclagem",
+    "description": "Collection completa para testar a EcoColeta API - Gestão de Resíduos e Reciclagem (ESG)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "baseUrl", "value": "http://localhost:5261" },
     { "key": "token", "value": "" }
   ],
   "item": [
@@ -13,7 +13,21 @@
       "name": "Auth",
       "item": [
         {
-          "name": "Login",
+          "name": "POST Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -27,17 +41,24 @@
       ]
     },
     {
-      "name": "PontosColeta",
+      "name": "Pontos de Coleta",
       "item": [
         {
-          "name": "Listar",
+          "name": "GET Listar com paginação",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/pontos-coleta?pagina=1&tamanhoPagina=10"
           }
         },
         {
-          "name": "Criar (Admin)",
+          "name": "GET Buscar por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/pontos-coleta/1"
+          }
+        },
+        {
+          "name": "POST Criar ponto (Bearer Token)",
           "request": {
             "method": "POST",
             "header": [
@@ -46,25 +67,40 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome\": \"EcoPonto Teste\",\n  \"endereco\": \"Rua Teste, 10\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"São Paulo\",\n  \"latitude\": -23.55,\n  \"longitude\": -46.63,\n  \"tipoResiduoAceito\": 1,\n  \"capacidadeMaximaKg\": 500\n}"
+              "raw": "{\n  \"nome\": \"EcoPonto Novo\",\n  \"endereco\": \"Rua Verde, 50\",\n  \"bairro\": \"Vila Nova\",\n  \"cidade\": \"São Paulo\",\n  \"latitude\": -23.55,\n  \"longitude\": -46.63,\n  \"tipoResiduoAceito\": 1,\n  \"capacidadeMaximaKg\": 500\n}"
             },
             "url": "{{baseUrl}}/api/pontos-coleta"
           }
+        },
+        {
+          "name": "PUT Atualizar ponto (Bearer Token)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"EcoPonto Atualizado\",\n  \"endereco\": \"Rua Verde, 60\",\n  \"bairro\": \"Vila Nova\",\n  \"cidade\": \"São Paulo\",\n  \"latitude\": -23.55,\n  \"longitude\": -46.63,\n  \"tipoResiduoAceito\": 1,\n  \"capacidadeMaximaKg\": 600,\n  \"ativo\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/pontos-coleta/1"
+          }
         }
       ]
     },
     {
-      "name": "RegistrosResiduos",
+      "name": "Registros de Resíduos",
       "item": [
         {
-          "name": "Listar",
+          "name": "GET Listar com paginação",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/registros-residuos"
+            "url": "{{baseUrl}}/api/registros-residuos?pagina=1&tamanhoPagina=10"
           }
         },
         {
-          "name": "Registrar (Admin)",
+          "name": "POST Registrar descarte (Bearer Token)",
           "request": {
             "method": "POST",
             "header": [
@@ -73,7 +109,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pontoColetaId\": 1,\n  \"tipoResiduo\": 1,\n  \"pesoKg\": 50,\n  \"origem\": \"Comunidade Local\"\n}"
+              "raw": "{\n  \"pontoColetaId\": 1,\n  \"tipoResiduo\": 1,\n  \"pesoKg\": 25.5,\n  \"origem\": \"Escola Municipal\",\n  \"observacao\": \"Coleta semanal\"\n}"
             },
             "url": "{{baseUrl}}/api/registros-residuos"
           }
@@ -81,17 +117,25 @@
       ]
     },
     {
-      "name": "AlertasColeta",
+      "name": "Alertas",
       "item": [
         {
-          "name": "Listar",
+          "name": "GET Listar com paginação",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/alertas-coleta"
+            "url": "{{baseUrl}}/api/alertas-coleta?pagina=1&tamanhoPagina=10"
           }
         },
         {
-          "name": "Recalcular (Admin)",
+          "name": "PATCH Resolver alerta (Bearer Token)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/alertas-coleta/1/resolver"
+          }
+        },
+        {
+          "name": "POST Recalcular alertas (Bearer Token)",
           "request": {
             "method": "POST",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
@@ -101,29 +145,44 @@
       ]
     },
     {
-      "name": "DestinacoesResiduos",
+      "name": "Destinações",
       "item": [
         {
-          "name": "Listar",
+          "name": "GET Listar destinações",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/destinacoes-residuos"
+            "url": "{{baseUrl}}/api/destinacoes-residuos?pagina=1&tamanhoPagina=10"
           }
         },
         {
-          "name": "Obter por tipo",
+          "name": "GET Buscar por tipo",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/destinacoes-residuos/Plastico"
+          }
+        },
+        {
+          "name": "POST Criar destinação (Bearer Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoResiduo\": 6,\n  \"descricao\": \"Eletrônicos diversos\",\n  \"instrucoesDescarte\": \"Levar a pontos de coleta especializados em equipamentos eletrônicos.\",\n  \"reciclavel\": true,\n  \"riscoAmbiental\": \"Alto\"\n}"
+            },
+            "url": "{{baseUrl}}/api/destinacoes-residuos"
           }
         }
       ]
     },
     {
-      "name": "RelatoriosImpacto",
+      "name": "Relatórios",
       "item": [
         {
-          "name": "Resumo",
+          "name": "GET Resumo de impacto ambiental",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/relatorios-impacto/resumo"
