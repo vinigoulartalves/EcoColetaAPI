@@ -1,0 +1,25 @@
+## Build
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.idea/
+
+## NuGet
+*.nupkg
+**/packages/*
+
+## EF
+*.db
+*.db-shm
+*.db-wal
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Logs
+*.log
