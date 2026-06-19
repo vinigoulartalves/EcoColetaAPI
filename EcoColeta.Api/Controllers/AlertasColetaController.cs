@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EcoColeta.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/alertas-coleta")]
 public class AlertasColetaController : ControllerBase
 {
     private readonly IAlertaColetaService _service;
@@ -20,24 +20,26 @@ public class AlertasColetaController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> Listar(
-        [FromQuery] FiltroPaginacaoRequest paginacao,
+        [FromQuery] ParametrosPaginacao paginacao,
         [FromQuery] bool? resolvido,
-        [FromQuery] NivelAlerta? nivel)
+        [FromQuery] NivelAlerta? nivel,
+        [FromQuery] int? pontoColetaId)
     {
         var resultado = await _service.ListarAsync(
             paginacao.ObterPaginaValida(),
             paginacao.ObterTamanhoPaginaValido(),
             resolvido,
-            nivel);
+            nivel,
+            pontoColetaId);
 
         return Ok(resultado);
     }
 
-    [HttpGet("{id:int}")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ObterPorId(int id)
+    [HttpPatch("{id:int}/resolver")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Resolver(int id)
     {
-        var resultado = await _service.ObterPorIdAsync(id);
+        var resultado = await _service.ResolverAsync(id);
         return Ok(resultado);
     }
 

@@ -7,19 +7,22 @@ namespace EcoColeta.Api.Repositories;
 
 public class PontoColetaRepository : IPontoColetaRepository
 {
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
 
-    public PontoColetaRepository(EcoColetaDbContext context)
+    public PontoColetaRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginacaoResponse<PontoColeta>> ListarAsync(int pagina, int tamanhoPagina, string? cidade, TipoResiduo? tipoResiduo, bool? ativo)
+    public async Task<PagedResponse<PontoColeta>> ListarAsync(int pagina, int tamanhoPagina, string? cidade, string? bairro, TipoResiduo? tipoResiduo, bool? ativo)
     {
         var query = _context.PontosColeta.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(cidade))
             query = query.Where(p => p.Cidade.Contains(cidade));
+
+        if (!string.IsNullOrWhiteSpace(bairro))
+            query = query.Where(p => p.Bairro.Contains(bairro));
 
         if (tipoResiduo.HasValue)
             query = query.Where(p => p.TipoResiduoAceito == tipoResiduo.Value);
@@ -34,7 +37,7 @@ public class PontoColetaRepository : IPontoColetaRepository
             .Take(tamanhoPagina)
             .ToListAsync();
 
-        return new PaginacaoResponse<PontoColeta>
+        return new PagedResponse<PontoColeta>
         {
             Itens = itens,
             PaginaAtual = pagina,
@@ -66,5 +69,10 @@ public class PontoColetaRepository : IPontoColetaRepository
     public async Task<IEnumerable<PontoColeta>> ListarTodosAtivosAsync()
     {
         return await _context.PontosColeta.AsNoTracking().Where(p => p.Ativo).ToListAsync();
+    }
+
+    public async Task<int> ContarAtivosAsync()
+    {
+        return await _context.PontosColeta.AsNoTracking().CountAsync(p => p.Ativo);
     }
 }

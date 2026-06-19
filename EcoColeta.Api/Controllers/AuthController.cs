@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EcoColeta.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -20,6 +20,9 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var resultado = await _authService.LoginAsync(request);
         return Ok(resultado);
     }

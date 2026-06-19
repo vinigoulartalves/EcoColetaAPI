@@ -8,7 +8,7 @@ namespace EcoColeta.Api.Services;
 
 public interface IPontoColetaService
 {
-    Task<PaginacaoResponse<PontoColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, string? cidade, TipoResiduo? tipoResiduo, bool? ativo);
+    Task<PagedResponse<PontoColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, string? cidade, string? bairro, TipoResiduo? tipoResiduo, bool? ativo);
     Task<PontoColetaResponse> ObterPorIdAsync(int id);
     Task<PontoColetaResponse> CriarAsync(CriarPontoColetaRequest request);
     Task<PontoColetaResponse> AtualizarAsync(int id, AtualizarPontoColetaRequest request);
@@ -23,9 +23,9 @@ public class PontoColetaService : IPontoColetaService
         _repository = repository;
     }
 
-    public async Task<PaginacaoResponse<PontoColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, string? cidade, TipoResiduo? tipoResiduo, bool? ativo)
+    public async Task<PagedResponse<PontoColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, string? cidade, string? bairro, TipoResiduo? tipoResiduo, bool? ativo)
     {
-        var resultado = await _repository.ListarAsync(pagina, tamanhoPagina, cidade, tipoResiduo, ativo);
+        var resultado = await _repository.ListarAsync(pagina, tamanhoPagina, cidade, bairro, tipoResiduo, ativo);
         return MapeadorResponse.ParaPaginacao(resultado, MapeadorResponse.ParaResponse);
     }
 

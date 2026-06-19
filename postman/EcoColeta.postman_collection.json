@@ -5,8 +5,8 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-  { "key": "baseUrl", "value": "http://localhost:8080" },
-  { "key": "token", "value": "" }
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" }
   ],
   "item": [
     {
@@ -21,7 +21,7 @@
               "mode": "raw",
               "raw": "{\n  \"email\": \"admin@ecocoleta.com\",\n  \"senha\": \"Admin@123\"\n}"
             },
-            "url": "{{baseUrl}}/api/Auth/login"
+            "url": "{{baseUrl}}/api/auth/login"
           }
         }
       ]
@@ -33,7 +33,7 @@
           "name": "Listar",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/PontosColeta?pagina=1&tamanhoPagina=10"
+            "url": "{{baseUrl}}/api/pontos-coleta?pagina=1&tamanhoPagina=10"
           }
         },
         {
@@ -48,7 +48,7 @@
               "mode": "raw",
               "raw": "{\n  \"nome\": \"EcoPonto Teste\",\n  \"endereco\": \"Rua Teste, 10\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"São Paulo\",\n  \"latitude\": -23.55,\n  \"longitude\": -46.63,\n  \"tipoResiduoAceito\": 1,\n  \"capacidadeMaximaKg\": 500\n}"
             },
-            "url": "{{baseUrl}}/api/PontosColeta"
+            "url": "{{baseUrl}}/api/pontos-coleta"
           }
         }
       ]
@@ -60,7 +60,7 @@
           "name": "Listar",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/RegistrosResiduos"
+            "url": "{{baseUrl}}/api/registros-residuos"
           }
         },
         {
@@ -75,7 +75,7 @@
               "mode": "raw",
               "raw": "{\n  \"pontoColetaId\": 1,\n  \"tipoResiduo\": 1,\n  \"pesoKg\": 50,\n  \"origem\": \"Comunidade Local\"\n}"
             },
-            "url": "{{baseUrl}}/api/RegistrosResiduos"
+            "url": "{{baseUrl}}/api/registros-residuos"
           }
         }
       ]
@@ -87,7 +87,7 @@
           "name": "Listar",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/AlertasColeta"
+            "url": "{{baseUrl}}/api/alertas-coleta"
           }
         },
         {
@@ -95,7 +95,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": "{{baseUrl}}/api/AlertasColeta/recalcular"
+            "url": "{{baseUrl}}/api/alertas-coleta/recalcular"
           }
         }
       ]
@@ -107,7 +107,14 @@
           "name": "Listar",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/DestinacoesResiduos"
+            "url": "{{baseUrl}}/api/destinacoes-residuos"
+          }
+        },
+        {
+          "name": "Obter por tipo",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/destinacoes-residuos/Plastico"
           }
         }
       ]
@@ -116,10 +123,10 @@
       "name": "RelatoriosImpacto",
       "item": [
         {
-          "name": "Gerar Relatório",
+          "name": "Resumo",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/RelatoriosImpacto"
+            "url": "{{baseUrl}}/api/relatorios-impacto/resumo"
           }
         }
       ]

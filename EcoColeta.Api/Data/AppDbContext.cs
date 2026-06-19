@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcoColeta.Api.Data;
 
-public class EcoColetaDbContext : DbContext
+public class AppDbContext : DbContext
 {
-    public EcoColetaDbContext(DbContextOptions<EcoColetaDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
 

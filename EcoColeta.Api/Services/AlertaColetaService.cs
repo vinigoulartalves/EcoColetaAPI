@@ -9,8 +9,8 @@ namespace EcoColeta.Api.Services;
 
 public interface IAlertaColetaService
 {
-    Task<PaginacaoResponse<AlertaColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel);
-    Task<AlertaColetaResponse> ObterPorIdAsync(int id);
+    Task<PagedResponse<AlertaColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel, int? pontoColetaId);
+    Task<AlertaColetaResponse> ResolverAsync(int id);
     Task<int> RecalcularAlertasAsync();
     Task VerificarEGerarAlertaAsync(PontoColeta ponto);
 }
@@ -18,26 +18,37 @@ public interface IAlertaColetaService
 public class AlertaColetaService : IAlertaColetaService
 {
     private readonly IAlertaColetaRepository _repository;
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
 
-    public AlertaColetaService(IAlertaColetaRepository repository, EcoColetaDbContext context)
+    public AlertaColetaService(IAlertaColetaRepository repository, AppDbContext context)
     {
         _repository = repository;
         _context = context;
     }
 
-    public async Task<PaginacaoResponse<AlertaColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel)
+    public async Task<PagedResponse<AlertaColetaResponse>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel, int? pontoColetaId)
     {
-        var resultado = await _repository.ListarAsync(pagina, tamanhoPagina, resolvido, nivel);
+        var resultado = await _repository.ListarAsync(pagina, tamanhoPagina, resolvido, nivel, pontoColetaId);
         return MapeadorResponse.ParaPaginacao(resultado, MapeadorResponse.ParaResponse);
     }
 
-    public async Task<AlertaColetaResponse> ObterPorIdAsync(int id)
+    public async Task<AlertaColetaResponse> ResolverAsync(int id)
     {
-        var alerta = await _repository.ObterPorIdAsync(id)
+        var alerta = await _repository.ObterPorIdParaAtualizacaoAsync(id)
             ?? throw new NotFoundException($"Alerta com id {id} não encontrado.");
 
-        return MapeadorResponse.ParaResponse(alerta);
+        if (alerta.Resolvido)
+            throw new BusinessException("Este alerta já está resolvido.");
+
+        alerta.Resolvido = true;
+        alerta.ResolvidoEm = DateTime.UtcNow;
+
+        var atualizado = await _repository.AtualizarAsync(alerta);
+        atualizado.PontoColeta = await _context.PontosColeta
+            .AsNoTracking()
+            .FirstAsync(p => p.Id == atualizado.PontoColetaId);
+
+        return MapeadorResponse.ParaResponse(atualizado);
     }
 
     public async Task<int> RecalcularAlertasAsync()

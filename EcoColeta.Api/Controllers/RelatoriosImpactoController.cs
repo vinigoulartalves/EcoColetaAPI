@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EcoColeta.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/relatorios-impacto")]
 public class RelatoriosImpactoController : ControllerBase
 {
     private readonly IRelatorioImpactoService _service;
@@ -15,19 +15,11 @@ public class RelatoriosImpactoController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("resumo")]
     [AllowAnonymous]
-    public async Task<IActionResult> Gerar()
+    public async Task<IActionResult> ObterResumo()
     {
-        var resultado = await _service.GerarAsync();
-        return Ok(resultado);
-    }
-
-    [HttpPost("gerar")]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GerarConsolidado()
-    {
-        var resultado = await _service.GerarAsync();
+        var resultado = await _service.ObterResumoAsync();
         return Ok(resultado);
     }
 }

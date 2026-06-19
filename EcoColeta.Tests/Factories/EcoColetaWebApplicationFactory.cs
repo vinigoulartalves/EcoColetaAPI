@@ -14,19 +14,19 @@ public class EcoColetaWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            services.RemoveAll(typeof(DbContextOptions<EcoColetaDbContext>));
-            services.AddDbContext<EcoColetaDbContext>(options =>
+            services.RemoveAll(typeof(DbContextOptions<AppDbContext>));
+            services.AddDbContext<AppDbContext>(options =>
                 options.UseInMemoryDatabase("EcoColetaTestDb"));
 
             var sp = services.BuildServiceProvider();
             using var scope = sp.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<EcoColetaDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             context.Database.EnsureCreated();
             SeedTestData(context);
         });
     }
 
-    private static void SeedTestData(EcoColetaDbContext context)
+    private static void SeedTestData(AppDbContext context)
     {
         if (context.PontosColeta.Any()) return;
 

@@ -5,8 +5,8 @@ namespace EcoColeta.Api.Repositories;
 
 public interface IAlertaColetaRepository
 {
-    Task<PaginacaoResponse<AlertaColeta>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel);
-    Task<AlertaColeta?> ObterPorIdAsync(int id);
+    Task<PagedResponse<AlertaColeta>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel, int? pontoColetaId);
+    Task<AlertaColeta?> ObterPorIdParaAtualizacaoAsync(int id);
     Task<AlertaColeta> CriarAsync(AlertaColeta alerta);
     Task<AlertaColeta> AtualizarAsync(AlertaColeta alerta);
     Task<IEnumerable<AlertaColeta>> ListarNaoResolvidosPorPontoAsync(int pontoColetaId);

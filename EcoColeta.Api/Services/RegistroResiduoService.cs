@@ -10,20 +10,19 @@ namespace EcoColeta.Api.Services;
 
 public interface IRegistroResiduoService
 {
-    Task<PaginacaoResponse<RegistroResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina, int? pontoColetaId, TipoResiduo? tipoResiduo);
-    Task<RegistroResiduoResponse> ObterPorIdAsync(int id);
-    Task<RegistroResiduoResponse> RegistrarAsync(CriarRegistroResiduoRequest request);
+    Task<PagedResponse<RegistroResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina, int? pontoColetaId, TipoResiduo? tipoResiduo);
+    Task<RegistroResiduoResponse> RegistrarAsync(RegistrarResiduoRequest request);
 }
 
 public class RegistroResiduoService : IRegistroResiduoService
 {
     private readonly IRegistroResiduoRepository _registroRepository;
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
     private readonly IAlertaColetaService _alertaService;
 
     public RegistroResiduoService(
         IRegistroResiduoRepository registroRepository,
-        EcoColetaDbContext context,
+        AppDbContext context,
         IAlertaColetaService alertaService)
     {
         _registroRepository = registroRepository;
@@ -31,21 +30,13 @@ public class RegistroResiduoService : IRegistroResiduoService
         _alertaService = alertaService;
     }
 
-    public async Task<PaginacaoResponse<RegistroResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina, int? pontoColetaId, TipoResiduo? tipoResiduo)
+    public async Task<PagedResponse<RegistroResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina, int? pontoColetaId, TipoResiduo? tipoResiduo)
     {
         var resultado = await _registroRepository.ListarAsync(pagina, tamanhoPagina, pontoColetaId, tipoResiduo);
         return MapeadorResponse.ParaPaginacao(resultado, MapeadorResponse.ParaResponse);
     }
 
-    public async Task<RegistroResiduoResponse> ObterPorIdAsync(int id)
-    {
-        var registro = await _registroRepository.ObterPorIdAsync(id)
-            ?? throw new NotFoundException($"Registro de resíduo com id {id} não encontrado.");
-
-        return MapeadorResponse.ParaResponse(registro);
-    }
-
-    public async Task<RegistroResiduoResponse> RegistrarAsync(CriarRegistroResiduoRequest request)
+    public async Task<RegistroResiduoResponse> RegistrarAsync(RegistrarResiduoRequest request)
     {
         var ponto = await _context.PontosColeta.FirstOrDefaultAsync(p => p.Id == request.PontoColetaId)
             ?? throw new NotFoundException($"Ponto de coleta com id {request.PontoColetaId} não encontrado.");

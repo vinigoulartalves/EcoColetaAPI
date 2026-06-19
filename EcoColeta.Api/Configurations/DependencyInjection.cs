@@ -1,10 +1,7 @@
-using System.Text;
 using EcoColeta.Api.Data;
 using EcoColeta.Api.Repositories;
 using EcoColeta.Api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace EcoColeta.Api.Configurations;
@@ -15,7 +12,7 @@ public static class DependencyInjection
     {
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
 
-        services.AddDbContext<EcoColetaDbContext>(options =>
+        services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IPontoColetaRepository, PontoColetaRepository>();
@@ -30,27 +27,6 @@ public static class DependencyInjection
         services.AddScoped<IDestinacaoResiduoService, DestinacaoResiduoService>();
         services.AddScoped<IRelatorioImpactoService, RelatorioImpactoService>();
         services.AddScoped<IAuthService, AuthService>();
-
-        var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
-            ?? throw new InvalidOperationException("Configuração JWT não encontrada.");
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings.Emissor,
-                    ValidAudience = jwtSettings.Audiencia,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.ChaveSecreta)),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
-
-        services.AddAuthorization();
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();

@@ -7,14 +7,14 @@ namespace EcoColeta.Api.Repositories;
 
 public class RegistroResiduoRepository : IRegistroResiduoRepository
 {
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
 
-    public RegistroResiduoRepository(EcoColetaDbContext context)
+    public RegistroResiduoRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginacaoResponse<RegistroResiduo>> ListarAsync(int pagina, int tamanhoPagina, int? pontoColetaId, TipoResiduo? tipoResiduo)
+    public async Task<PagedResponse<RegistroResiduo>> ListarAsync(int pagina, int tamanhoPagina, int? pontoColetaId, TipoResiduo? tipoResiduo)
     {
         var query = _context.RegistrosResiduos
             .AsNoTracking()
@@ -34,7 +34,7 @@ public class RegistroResiduoRepository : IRegistroResiduoRepository
             .Take(tamanhoPagina)
             .ToListAsync();
 
-        return new PaginacaoResponse<RegistroResiduo>
+        return new PagedResponse<RegistroResiduo>
         {
             Itens = itens,
             PaginaAtual = pagina,

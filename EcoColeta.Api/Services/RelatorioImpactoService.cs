@@ -5,7 +5,7 @@ namespace EcoColeta.Api.Services;
 
 public interface IRelatorioImpactoService
 {
-    Task<RelatorioImpactoResponse> GerarAsync();
+    Task<RelatorioImpactoResponse> ObterResumoAsync();
 }
 
 public class RelatorioImpactoService : IRelatorioImpactoService
@@ -24,25 +24,20 @@ public class RelatorioImpactoService : IRelatorioImpactoService
         _alertaRepository = alertaRepository;
     }
 
-    public async Task<RelatorioImpactoResponse> GerarAsync()
+    public async Task<RelatorioImpactoResponse> ObterResumoAsync()
     {
         var totalPeso = await _registroRepository.ObterTotalPesoAsync();
         var pesoPorTipo = await _registroRepository.ObterPesoPorTipoAsync();
-        var pontos = (await _pontoRepository.ListarTodosAtivosAsync()).ToList();
-        var pontosEmAlerta = await _alertaRepository.ContarPontosEmAlertaAsync();
-        var alertasCriticos = await _alertaRepository.ContarCriticosNaoResolvidosAsync();
-
-        var estimativaImpacto = totalPeso * 0.75m;
+        var pontosAtivos = await _pontoRepository.ContarAtivosAsync();
+        var alertasAbertos = await _alertaRepository.ContarNaoResolvidosAsync();
 
         return new RelatorioImpactoResponse
         {
             TotalResiduosRegistradosKg = totalPeso,
-            TotalPontosColeta = pontos.Count,
-            PontosAtivos = pontos.Count(p => p.Ativo),
-            PontosEmAlerta = pontosEmAlerta,
-            AlertasCriticos = alertasCriticos,
-            EstimativaImpactoPositivoKg = Math.Round(estimativaImpacto, 2),
             ResiduosPorTipo = pesoPorTipo.ToDictionary(k => k.Key.ToString(), v => v.Value),
+            PontosColetaAtivos = pontosAtivos,
+            AlertasAbertos = alertasAbertos,
+            EstimativaImpactoPositivoKg = Math.Round(totalPeso * 0.75m, 2),
             GeradoEm = DateTime.UtcNow
         };
     }

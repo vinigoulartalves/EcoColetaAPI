@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EcoColeta.Api.Migrations
 {
-    [DbContext(typeof(EcoColetaDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20260619155705_InitialCreate")]
     partial class InitialCreate
     {

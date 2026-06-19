@@ -72,11 +72,11 @@ public static class MapeadorResponse
         };
     }
 
-    public static PaginacaoResponse<TResponse> ParaPaginacao<TEntity, TResponse>(
-        PaginacaoResponse<TEntity> paginacao,
+    public static PagedResponse<TResponse> ParaPaginacao<TEntity, TResponse>(
+        PagedResponse<TEntity> paginacao,
         Func<TEntity, TResponse> mapeador)
     {
-        return new PaginacaoResponse<TResponse>
+        return new PagedResponse<TResponse>
         {
             Itens = paginacao.Itens.Select(mapeador),
             PaginaAtual = paginacao.PaginaAtual,

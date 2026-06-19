@@ -5,7 +5,7 @@ namespace EcoColeta.Api.Data;
 
 public static class DbInitializer
 {
-    public static async Task SeedAsync(EcoColetaDbContext context)
+    public static async Task SeedAsync(AppDbContext context)
     {
         if (context.Database.IsRelational())
             await context.Database.MigrateAsync();
@@ -126,6 +126,18 @@ public static class DbInitializer
                     Longitude = -46.6559,
                     TipoResiduoAceito = TipoResiduo.Papel,
                     CapacidadeMaximaKg = 300,
+                    OcupacaoAtualKg = 0
+                },
+                new PontoColeta
+                {
+                    Nome = "EcoPonto Vila Mariana",
+                    Endereco = "Rua Domingos de Morais, 200",
+                    Bairro = "Vila Mariana",
+                    Cidade = "São Paulo",
+                    Latitude = -23.5890,
+                    Longitude = -46.6342,
+                    TipoResiduoAceito = TipoResiduo.Vidro,
+                    CapacidadeMaximaKg = 400,
                     OcupacaoAtualKg = 0
                 }
             );

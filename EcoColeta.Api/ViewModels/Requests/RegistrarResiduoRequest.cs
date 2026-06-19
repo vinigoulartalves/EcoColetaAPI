@@ -3,7 +3,7 @@ using EcoColeta.Api.Models;
 
 namespace EcoColeta.Api.ViewModels.Requests;
 
-public class CriarRegistroResiduoRequest
+public class RegistrarResiduoRequest
 {
     [Required(ErrorMessage = "O ponto de coleta é obrigatório.")]
     [Range(1, int.MaxValue, ErrorMessage = "O ponto de coleta deve ser válido.")]

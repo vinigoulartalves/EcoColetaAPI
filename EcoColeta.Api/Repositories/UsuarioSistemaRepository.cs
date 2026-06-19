@@ -6,9 +6,9 @@ namespace EcoColeta.Api.Repositories;
 
 public class UsuarioSistemaRepository : IUsuarioSistemaRepository
 {
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
 
-    public UsuarioSistemaRepository(EcoColetaDbContext context)
+    public UsuarioSistemaRepository(AppDbContext context)
     {
         _context = context;
     }

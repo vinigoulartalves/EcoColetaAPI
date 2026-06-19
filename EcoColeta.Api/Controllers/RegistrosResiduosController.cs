@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EcoColeta.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/registros-residuos")]
 public class RegistrosResiduosController : ControllerBase
 {
     private readonly IRegistroResiduoService _service;
@@ -20,7 +20,7 @@ public class RegistrosResiduosController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> Listar(
-        [FromQuery] FiltroPaginacaoRequest paginacao,
+        [FromQuery] ParametrosPaginacao paginacao,
         [FromQuery] int? pontoColetaId,
         [FromQuery] TipoResiduo? tipoResiduo)
     {
@@ -33,19 +33,14 @@ public class RegistrosResiduosController : ControllerBase
         return Ok(resultado);
     }
 
-    [HttpGet("{id:int}")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ObterPorId(int id)
-    {
-        var resultado = await _service.ObterPorIdAsync(id);
-        return Ok(resultado);
-    }
-
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Registrar([FromBody] CriarRegistroResiduoRequest request)
+    public async Task<IActionResult> Registrar([FromBody] RegistrarResiduoRequest request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var resultado = await _service.RegistrarAsync(request);
-        return CreatedAtAction(nameof(ObterPorId), new { id = resultado.Id }, resultado);
+        return Created(string.Empty, resultado);
     }
 }

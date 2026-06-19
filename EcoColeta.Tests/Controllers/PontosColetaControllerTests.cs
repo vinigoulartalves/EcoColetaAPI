@@ -15,7 +15,7 @@ public class PontosColetaControllerTests : IClassFixture<EcoColetaWebApplication
     [Fact]
     public async Task Listar_DeveRetornarStatus200()
     {
-        var response = await _client.GetAsync("/api/PontosColeta");
+        var response = await _client.GetAsync("/api/pontos-coleta");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }

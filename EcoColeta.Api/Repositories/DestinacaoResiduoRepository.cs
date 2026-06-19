@@ -7,14 +7,14 @@ namespace EcoColeta.Api.Repositories;
 
 public class DestinacaoResiduoRepository : IDestinacaoResiduoRepository
 {
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
 
-    public DestinacaoResiduoRepository(EcoColetaDbContext context)
+    public DestinacaoResiduoRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginacaoResponse<DestinacaoResiduo>> ListarAsync(int pagina, int tamanhoPagina, bool? reciclavel)
+    public async Task<PagedResponse<DestinacaoResiduo>> ListarAsync(int pagina, int tamanhoPagina, bool? reciclavel)
     {
         var query = _context.DestinacoesResiduos.AsNoTracking().AsQueryable();
 
@@ -28,7 +28,7 @@ public class DestinacaoResiduoRepository : IDestinacaoResiduoRepository
             .Take(tamanhoPagina)
             .ToListAsync();
 
-        return new PaginacaoResponse<DestinacaoResiduo>
+        return new PagedResponse<DestinacaoResiduo>
         {
             Itens = itens,
             PaginaAtual = pagina,

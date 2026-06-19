@@ -15,7 +15,7 @@ public class DestinacoesResiduosControllerTests : IClassFixture<EcoColetaWebAppl
     [Fact]
     public async Task Listar_DeveRetornarStatus200()
     {
-        var response = await _client.GetAsync("/api/DestinacoesResiduos");
+        var response = await _client.GetAsync("/api/destinacoes-residuos");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }

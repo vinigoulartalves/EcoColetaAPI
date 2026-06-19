@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EcoColeta.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/pontos-coleta")]
 public class PontosColetaController : ControllerBase
 {
     private readonly IPontoColetaService _service;
@@ -20,8 +20,9 @@ public class PontosColetaController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> Listar(
-        [FromQuery] FiltroPaginacaoRequest paginacao,
+        [FromQuery] ParametrosPaginacao paginacao,
         [FromQuery] string? cidade,
+        [FromQuery] string? bairro,
         [FromQuery] TipoResiduo? tipoResiduo,
         [FromQuery] bool? ativo)
     {
@@ -29,6 +30,7 @@ public class PontosColetaController : ControllerBase
             paginacao.ObterPaginaValida(),
             paginacao.ObterTamanhoPaginaValido(),
             cidade,
+            bairro,
             tipoResiduo,
             ativo);
 
@@ -47,6 +49,9 @@ public class PontosColetaController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Criar([FromBody] CriarPontoColetaRequest request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var resultado = await _service.CriarAsync(request);
         return CreatedAtAction(nameof(ObterPorId), new { id = resultado.Id }, resultado);
     }
@@ -55,6 +60,9 @@ public class PontosColetaController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Atualizar(int id, [FromBody] AtualizarPontoColetaRequest request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var resultado = await _service.AtualizarAsync(id, request);
         return Ok(resultado);
     }

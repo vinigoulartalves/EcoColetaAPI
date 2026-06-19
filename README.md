@@ -2,109 +2,72 @@
 
 API RESTful em ASP.NET Core 8 para gestão de resíduos e reciclagem (tema ESG).
 
-## Estrutura do Projeto
+## Estrutura
 
 ```
 EcoColeta.Api/
-├── Controllers/          # Endpoints REST
-├── Data/                 # DbContext e seed
-├── Models/               # Entidades do banco
+├── Controllers/
+├── Data/              → AppDbContext, seed
+├── Models/
 ├── ViewModels/
-│   ├── Requests/         # DTOs de entrada (com validações)
-│   └── Responses/        # DTOs de saída
-├── Services/             # Regras de negócio
-├── Repositories/         # Acesso a dados
-├── Middlewares/          # Tratamento global de exceções
-├── Configurations/       # DI, JWT, Swagger
-└── Migrations/           # Migrations EF Core
+│   ├── Requests/
+│   └── Responses/     → PagedResponse<T>
+├── Services/
+├── Repositories/
+├── Middlewares/
+├── Configurations/
+└── Migrations/
 
 EcoColeta.Tests/
-├── Factories/            # WebApplicationFactory para testes
-└── Controllers/          # Testes de integração por controller
+├── Factories/
+└── Controllers/
 ```
 
 ## Pré-requisitos
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- .NET 8 SDK
 - SQL Server local (ou Docker)
-- Postman / Insomnia (opcional)
 
-## Executar Localmente
-
-### 1. Subir o SQL Server (Docker)
+## Executar
 
 ```bash
 docker compose up sqlserver -d
-```
-
-### 2. Aplicar migrations e rodar a API
-
-```bash
 cd EcoColeta.Api
 dotnet ef database update
 dotnet run
 ```
 
-A API estará em `https://localhost:7xxx` ou `http://localhost:5xxx`. O Swagger fica na raiz (`/`).
+Swagger: `http://localhost:5xxx/` (Development)
 
-### 3. Credenciais padrão (seed)
+### Credenciais seed
 
 | Campo  | Valor                 |
 |--------|-----------------------|
 | E-mail | `admin@ecocoleta.com` |
 | Senha  | `Admin@123`           |
-| Role   | `Admin`               |
 
-## Autenticação JWT
+## Endpoints
 
-1. `POST /api/Auth/login` com e-mail e senha
-2. Copie o `token` da resposta
-3. Nos endpoints protegidos, envie o header: `Authorization: Bearer {token}`
-
-## Controllers
-
-| Controller | Leitura (público) | Escrita (Admin) |
-|---|---|---|
-| `PontosColeta` | GET listar, GET por id | POST, PUT |
-| `RegistrosResiduos` | GET listar, GET por id | POST registrar |
-| `AlertasColeta` | GET listar, GET por id | POST recalcular |
-| `DestinacoesResiduos` | GET listar, GET por id/tipo | POST, PUT, DELETE |
-| `RelatoriosImpacto` | GET relatório | POST gerar consolidado |
-| `Auth` | POST login | — |
+| Método | Rota | Auth |
+|--------|------|------|
+| GET | `/api/pontos-coleta` | Público |
+| GET | `/api/pontos-coleta/{id}` | Público |
+| POST | `/api/pontos-coleta` | Admin |
+| PUT | `/api/pontos-coleta/{id}` | Admin |
+| GET | `/api/registros-residuos` | Público |
+| POST | `/api/registros-residuos` | Admin |
+| GET | `/api/alertas-coleta` | Público |
+| PATCH | `/api/alertas-coleta/{id}/resolver` | Admin |
+| POST | `/api/alertas-coleta/recalcular` | Admin |
+| GET | `/api/destinacoes-residuos` | Público |
+| GET | `/api/destinacoes-residuos/{tipoResiduo}` | Público |
+| POST | `/api/destinacoes-residuos` | Admin |
+| GET | `/api/relatorios-impacto/resumo` | Público |
+| POST | `/api/auth/login` | Público |
 
 ## Paginação
 
-Endpoints de listagem aceitam:
-
-- `pagina` (padrão: 1)
-- `tamanhoPagina` (padrão: 10, máximo: 50)
-
-Resposta paginada:
-
-```json
-{
-  "itens": [],
-  "paginaAtual": 1,
-  "tamanhoPagina": 10,
-  "totalItens": 0,
-  "totalPaginas": 0
-}
-```
-
-## Regras de Negócio
-
-- Ao registrar descarte, a ocupação do ponto aumenta automaticamente
-- Ocupação ≥ 80% → alerta de **Atenção**
-- Ocupação ≥ 100% → alerta **Crítico**
-- Tipo de resíduo deve ser compatível com o ponto de coleta
-
-## Docker (API + SQL Server)
-
-```bash
-docker compose up --build
-```
-
-API disponível em `http://localhost:8080`.
+Parâmetros: `pagina` (padrão 1), `tamanhoPagina` (padrão 10, máx. 50).
 
 ## Testes
 
@@ -112,57 +75,12 @@ API disponível em `http://localhost:8080`.
 dotnet test
 ```
 
-## Exemplos de Requisição
+## Docker
 
-### Login
-
-```http
-POST /api/Auth/login
-Content-Type: application/json
-
-{
-  "email": "admin@ecocoleta.com",
-  "senha": "Admin@123"
-}
+```bash
+docker compose up --build
 ```
 
-### Criar ponto de coleta (Admin)
+API em `http://localhost:8080`.
 
-```http
-POST /api/PontosColeta
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "nome": "EcoPonto Vila",
-  "endereco": "Rua Verde, 50",
-  "bairro": "Vila Nova",
-  "cidade": "São Paulo",
-  "latitude": -23.55,
-  "longitude": -46.63,
-  "tipoResiduoAceito": 1,
-  "capacidadeMaximaKg": 400
-}
-```
-
-### Registrar descarte (Admin)
-
-```http
-POST /api/RegistrosResiduos
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "pontoColetaId": 1,
-  "tipoResiduo": 1,
-  "pesoKg": 25.5,
-  "origem": "Escola Municipal",
-  "observacao": "Coleta semanal"
-}
-```
-
-### Relatório de impacto
-
-```http
-GET /api/RelatoriosImpacto
-```
+Coleção Postman: `postman/EcoColeta.postman_collection.json`

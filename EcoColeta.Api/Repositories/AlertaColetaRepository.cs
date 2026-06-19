@@ -7,14 +7,14 @@ namespace EcoColeta.Api.Repositories;
 
 public class AlertaColetaRepository : IAlertaColetaRepository
 {
-    private readonly EcoColetaDbContext _context;
+    private readonly AppDbContext _context;
 
-    public AlertaColetaRepository(EcoColetaDbContext context)
+    public AlertaColetaRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginacaoResponse<AlertaColeta>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel)
+    public async Task<PagedResponse<AlertaColeta>> ListarAsync(int pagina, int tamanhoPagina, bool? resolvido, NivelAlerta? nivel, int? pontoColetaId)
     {
         var query = _context.AlertasColeta
             .AsNoTracking()
@@ -27,6 +27,9 @@ public class AlertaColetaRepository : IAlertaColetaRepository
         if (nivel.HasValue)
             query = query.Where(a => a.Nivel == nivel.Value);
 
+        if (pontoColetaId.HasValue)
+            query = query.Where(a => a.PontoColetaId == pontoColetaId.Value);
+
         var totalItens = await query.CountAsync();
         var itens = await query
             .OrderByDescending(a => a.CriadoEm)
@@ -34,7 +37,7 @@ public class AlertaColetaRepository : IAlertaColetaRepository
             .Take(tamanhoPagina)
             .ToListAsync();
 
-        return new PaginacaoResponse<AlertaColeta>
+        return new PagedResponse<AlertaColeta>
         {
             Itens = itens,
             PaginaAtual = pagina,
@@ -44,12 +47,9 @@ public class AlertaColetaRepository : IAlertaColetaRepository
         };
     }
 
-    public async Task<AlertaColeta?> ObterPorIdAsync(int id)
+    public async Task<AlertaColeta?> ObterPorIdParaAtualizacaoAsync(int id)
     {
-        return await _context.AlertasColeta
-            .AsNoTracking()
-            .Include(a => a.PontoColeta)
-            .FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.AlertasColeta.FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<AlertaColeta> CriarAsync(AlertaColeta alerta)

@@ -1,6 +1,6 @@
 namespace EcoColeta.Api.ViewModels.Responses;
 
-public class PaginacaoResponse<T>
+public class PagedResponse<T>
 {
     public IEnumerable<T> Itens { get; set; } = Enumerable.Empty<T>();
     public int PaginaAtual { get; set; }

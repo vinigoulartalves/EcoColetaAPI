@@ -8,12 +8,9 @@ namespace EcoColeta.Api.Services;
 
 public interface IDestinacaoResiduoService
 {
-    Task<PaginacaoResponse<DestinacaoResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina, bool? reciclavel);
-    Task<DestinacaoResiduoResponse> ObterPorIdAsync(int id);
+    Task<PagedResponse<DestinacaoResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina);
     Task<DestinacaoResiduoResponse> ObterPorTipoAsync(TipoResiduo tipoResiduo);
     Task<DestinacaoResiduoResponse> CriarAsync(CriarDestinacaoResiduoRequest request);
-    Task<DestinacaoResiduoResponse> AtualizarAsync(int id, AtualizarDestinacaoResiduoRequest request);
-    Task ExcluirAsync(int id);
 }
 
 public class DestinacaoResiduoService : IDestinacaoResiduoService
@@ -25,18 +22,10 @@ public class DestinacaoResiduoService : IDestinacaoResiduoService
         _repository = repository;
     }
 
-    public async Task<PaginacaoResponse<DestinacaoResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina, bool? reciclavel)
+    public async Task<PagedResponse<DestinacaoResiduoResponse>> ListarAsync(int pagina, int tamanhoPagina)
     {
-        var resultado = await _repository.ListarAsync(pagina, tamanhoPagina, reciclavel);
+        var resultado = await _repository.ListarAsync(pagina, tamanhoPagina, reciclavel: null);
         return MapeadorResponse.ParaPaginacao(resultado, MapeadorResponse.ParaResponse);
-    }
-
-    public async Task<DestinacaoResiduoResponse> ObterPorIdAsync(int id)
-    {
-        var destinacao = await _repository.ObterPorIdAsync(id)
-            ?? throw new NotFoundException($"Destinação com id {id} não encontrada.");
-
-        return MapeadorResponse.ParaResponse(destinacao);
     }
 
     public async Task<DestinacaoResiduoResponse> ObterPorTipoAsync(TipoResiduo tipoResiduo)
@@ -64,27 +53,5 @@ public class DestinacaoResiduoService : IDestinacaoResiduoService
 
         var criada = await _repository.CriarAsync(destinacao);
         return MapeadorResponse.ParaResponse(criada);
-    }
-
-    public async Task<DestinacaoResiduoResponse> AtualizarAsync(int id, AtualizarDestinacaoResiduoRequest request)
-    {
-        var destinacao = await _repository.ObterPorIdAsync(id)
-            ?? throw new NotFoundException($"Destinação com id {id} não encontrada.");
-
-        destinacao.Descricao = request.Descricao;
-        destinacao.InstrucoesDescarte = request.InstrucoesDescarte;
-        destinacao.Reciclavel = request.Reciclavel;
-        destinacao.RiscoAmbiental = request.RiscoAmbiental;
-
-        var atualizada = await _repository.AtualizarAsync(destinacao);
-        return MapeadorResponse.ParaResponse(atualizada);
-    }
-
-    public async Task ExcluirAsync(int id)
-    {
-        var destinacao = await _repository.ObterPorIdAsync(id)
-            ?? throw new NotFoundException($"Destinação com id {id} não encontrada.");
-
-        await _repository.ExcluirAsync(destinacao);
     }
 }

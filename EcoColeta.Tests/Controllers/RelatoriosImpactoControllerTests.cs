@@ -13,9 +13,9 @@ public class RelatoriosImpactoControllerTests : IClassFixture<EcoColetaWebApplic
     }
 
     [Fact]
-    public async Task Gerar_DeveRetornarStatus200()
+    public async Task ObterResumo_DeveRetornarStatus200()
     {
-        var response = await _client.GetAsync("/api/RelatoriosImpacto");
+        var response = await _client.GetAsync("/api/relatorios-impacto/resumo");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
