@@ -1,0 +1,201 @@
+EcoColeta API - Evidências MongoDB
+Executado em: 2026-09-07T21:42:50.316Z
+Banco de dados: EcoColetaDb
+Conexão: MongoDB em memória (mongodb-memory-server)
+
+========== CREATE / INSERT (SEED) ==========
+use EcoColetaDb
+
+// Collection: pontos_coleta (11 documentos)
+db.pontos_coleta.insertMany([...]) // 11 inseridos
+
+// Collection: destinacoes_residuos (11 documentos)
+db.destinacoes_residuos.insertMany([...]) // 11 inseridos
+
+// Collection: usuarios_sistema (11 documentos)
+db.usuarios_sistema.insertMany([...]) // 11 inseridos
+
+// Collection: registros_residuos (12 documentos)
+db.registros_residuos.insertMany([...]) // 12 inseridos
+
+// Collection: alertas_coleta (11 documentos)
+db.alertas_coleta.insertMany([...]) // 11 inseridos
+
+// Índices criados em todas as collections
+
+========== READ (FIND) ==========
+
+db.pontos_coleta.countDocuments() => 11
+
+db.pontos_coleta.find({ cidade: 'São Paulo', ativo: true }).limit(3)
+[
+  {
+    "_id": "6a9f2fdad9a07f118523b341",
+    "nome": "EcoPonto Centro",
+    "bairro": "Centro",
+    "capacidadeMaximaKg": 500,
+    "ocupacaoAtualKg": 120
+  },
+  {
+    "_id": "6a9f2fdad9a07f118523b342",
+    "nome": "EcoPonto Jardins",
+    "bairro": "Jardins",
+    "capacidadeMaximaKg": 300,
+    "ocupacaoAtualKg": 85
+  },
+  {
+    "_id": "6a9f2fdad9a07f118523b345",
+    "nome": "EcoPonto Mooca",
+    "bairro": "Mooca",
+    "capacidadeMaximaKg": 250,
+    "ocupacaoAtualKg": 200
+  }
+]
+
+db.destinacoes_residuos.find({ reciclavel: true, riscoAmbiental: /Alto/ })
+[
+  {
+    "tipoResiduo": "Eletronico",
+    "riscoAmbiental": "Alto — metais pesados"
+  },
+  {
+    "tipoResiduo": "PilhasBaterias",
+    "riscoAmbiental": "Alto — contaminação"
+  },
+  {
+    "tipoResiduo": "OleoCozinha",
+    "riscoAmbiental": "Alto — contamina corpos d'água"
+  }
+]
+
+db.alertas_coleta.find({ resolvido: false, nivel: 'Critico' })
+[
+  {
+    "pontoColetaNome": "EcoPonto Guarulhos",
+    "mensagem": "Ocupação atingiu 91% — coleta urgente necessária"
+  },
+  {
+    "pontoColetaNome": "EcoPonto Tatuapé",
+    "mensagem": "Recipiente de pilhas quase cheio"
+  },
+  {
+    "pontoColetaNome": "EcoPonto Guarulhos",
+    "mensagem": "Ponto sobrecarregado — bloquear novos descartes"
+  }
+]
+
+db.registros_residuos.aggregate([{ $group: { _id: '$tipoResiduo', totalKg: { $sum: '$pesoKg' } } }])
+[
+  {
+    "_id": "Plastico",
+    "totalKg": 71.5,
+    "quantidade": 4
+  },
+  {
+    "_id": "Papel",
+    "totalKg": 35,
+    "quantidade": 2
+  },
+  {
+    "_id": "Metal",
+    "totalKg": 35,
+    "quantidade": 1
+  },
+  {
+    "_id": "Vidro",
+    "totalKg": 22,
+    "quantidade": 1
+  },
+  {
+    "_id": "Organico",
+    "totalKg": 18,
+    "quantidade": 1
+  },
+  {
+    "_id": "OleoCozinha",
+    "totalKg": 10,
+    "quantidade": 1
+  },
+  {
+    "_id": "Eletronico",
+    "totalKg": 5.5,
+    "quantidade": 1
+  },
+  {
+    "_id": "PilhasBaterias",
+    "totalKg": 2,
+    "quantidade": 1
+  }
+]
+
+========== UPDATE ==========
+
+db.pontos_coleta.updateOne({ nome: 'EcoPonto Centro' }, { $set: { ocupacaoAtualKg: 135, ultimaAtualizacao: new Date() } })
+=> matched: 1, modified: 1
+
+db.alertas_coleta.updateOne({ pontoColetaNome: 'EcoPonto Santana', resolvido: false }, { $set: { resolvido: true, resolvidoEm: new Date() } })
+=> matched: 1, modified: 1
+
+db.usuarios_sistema.updateOne({ email: 'maria.silva@ecocoleta.com' }, { $set: { 'preferencias.tema': 'escuro' } })
+=> matched: 1, modified: 1
+
+db.destinacoes_residuos.updateMany({ tipoResiduo: 'Plastico' }, { $inc: { 'impactoESG.reducaoCO2KgPorTonelada': 50 } })
+=> matched: 2, modified: 2
+
+========== INSERT (CREATE adicional) ==========
+
+db.pontos_coleta.insertOne({ nome: 'EcoPonto Novo CRUD', ... })
+=> insertedId: 6a9f2fdad9a07f118523b379
+
+========== DELETE ==========
+
+db.pontos_coleta.deleteOne({ nome: 'EcoPonto Inativo Teste' })
+=> deletedCount: 1
+
+db.usuarios_sistema.deleteOne({ email: 'inativo@ecocoleta.com' })
+=> deletedCount: 1
+
+========== RESUMO FINAL DAS COLLECTIONS ==========
+  pontos_coleta: 11 documentos
+  destinacoes_residuos: 11 documentos
+  usuarios_sistema: 10 documentos
+  registros_residuos: 12 documentos
+  alertas_coleta: 11 documentos
+
+========== EXEMPLO DE ESQUEMA FLEXÍVEL ==========
+Documentos em pontos_coleta com campos diferentes:
+[
+  {
+    "_id": "6a9f2fdad9a07f118523b341",
+    "nome": "EcoPonto Centro",
+    "horarioFuncionamento": {
+      "abertura": "08:00",
+      "fechamento": "18:00",
+      "diasUteis": true
+    }
+  },
+  {
+    "_id": "6a9f2fdad9a07f118523b342",
+    "nome": "EcoPonto Jardins",
+    "contato": {
+      "telefone": "(11) 3000-1000",
+      "email": "jardins@ecocoleta.com.br"
+    }
+  },
+  {
+    "_id": "6a9f2fdad9a07f118523b344",
+    "nome": "EcoPonto Pinheiros",
+    "certificacoes": [
+      "ISO 14001",
+      "Selo Verde SP"
+    ]
+  },
+  {
+    "_id": "6a9f2fdad9a07f118523b345",
+    "nome": "EcoPonto Mooca",
+    "parceria": {
+      "ong": "Composta Cidade",
+      "tipo": "compostagem comunitária"
+    }
+  }
+]

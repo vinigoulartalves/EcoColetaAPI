@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  mongodb:
+    image: mongo:7.0
+    container_name: ecocoleta-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: EcoColetaDb
+    volumes:
+      - mongodata:/data/db
+      - ./mongodb/ecocoleta-mongodb-crud.js:/docker-entrypoint-initdb.d/ecocoleta-mongodb-crud.js:ro
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: ecocoleta-sqlserver
@@ -27,3 +38,4 @@ services:
 
 volumes:
   sqldata:
+  mongodata:
