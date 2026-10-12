@@ -9,15 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEcoColetaServices(builder.Configuration);
 
-var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
-    ?? throw new InvalidOperationException("Configuração JWT não encontrada.");
-
-if (Encoding.UTF8.GetByteCount(jwtSettings.ChaveSecreta) < 32)
-    throw new InvalidOperationException("Defina Jwt__ChaveSecreta com pelo menos 32 bytes.");
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<IConfiguration>((options, configuration) =>
     {
+        var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
+            ?? throw new InvalidOperationException("Configuração JWT não encontrada.");
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -34,6 +31,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Valida a configuração final, incluindo overrides da factory de testes.
+if (Encoding.UTF8.GetByteCount(app.Configuration["Jwt:ChaveSecreta"] ?? "") < 32)
+    throw new InvalidOperationException("Defina Jwt__ChaveSecreta com pelo menos 32 bytes.");
 
 using (var scope = app.Services.CreateScope())
 {

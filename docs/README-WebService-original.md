@@ -1,3 +1,5 @@
+> DOCUMENTO HISTORICO da etapa WebService. Caminhos e credenciais foram alterados. Consulte o README da raiz para esta entrega DevOps.
+
 # EcoColeta API
 
 ## Descrição do Projeto
