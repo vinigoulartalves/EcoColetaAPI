@@ -1,0 +1,432 @@
+{
+  "run": {
+    "id": 38313648214,
+    "name": "EcoColeta CI/CD",
+    "run_number": 2,
+    "head_sha": "ec55375fe5c21bb0d1fe99ec6635b407a94121b7",
+    "head_branch": "codex/devops-atividade",
+    "html_url": "https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/38313648214",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-12T21:55:41Z",
+    "updated_at": "2026-10-12T21:59:42Z",
+    "run_started_at": "2026-10-12T21:55:41Z"
+  },
+  "jobs": [
+    {
+      "id": 115025027757,
+      "name": "Build, testes e imagem",
+      "html_url": "https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/38313648214/job/115025027757",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-12T21:55:43Z",
+      "completed_at": "2026-10-12T21:56:48Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-12T21:55:44Z",
+          "completed_at": "2026-10-12T21:55:45Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-12T21:55:45Z",
+          "completed_at": "2026-10-12T21:55:45Z"
+        },
+        {
+          "name": "Run actions/setup-dotnet@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-12T21:55:45Z",
+          "completed_at": "2026-10-12T21:55:46Z"
+        },
+        {
+          "name": "Restaurar dependencias",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-12T21:55:46Z",
+          "completed_at": "2026-10-12T21:55:52Z"
+        },
+        {
+          "name": "Build Release",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-12T21:55:52Z",
+          "completed_at": "2026-10-12T21:55:58Z"
+        },
+        {
+          "name": "Testes de integracao e cobertura",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-12T21:55:58Z",
+          "completed_at": "2026-10-12T21:56:07Z"
+        },
+        {
+          "name": "Publicar resultados dos testes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-12T21:56:07Z",
+          "completed_at": "2026-10-12T21:56:08Z"
+        },
+        {
+          "name": "Construir imagem unica",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-12T21:56:08Z",
+          "completed_at": "2026-10-12T21:56:33Z"
+        },
+        {
+          "name": "Exportar imagem e checksum",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-12T21:56:33Z",
+          "completed_at": "2026-10-12T21:56:43Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-12T21:56:43Z",
+          "completed_at": "2026-10-12T21:56:45Z"
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-12T21:56:45Z",
+          "completed_at": "2026-10-12T21:56:45Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-12T21:56:45Z",
+          "completed_at": "2026-10-12T21:56:46Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-12T21:56:46Z",
+          "completed_at": "2026-10-12T21:56:46Z"
+        }
+      ]
+    },
+    {
+      "id": 115025384839,
+      "name": "Deploy staging / Implantar e validar staging",
+      "html_url": "https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/38313648214/job/115025384839",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-12T21:56:51Z",
+      "completed_at": "2026-10-12T21:58:17Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-12T21:56:52Z",
+          "completed_at": "2026-10-12T21:56:53Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-12T21:56:53Z",
+          "completed_at": "2026-10-12T21:56:54Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-12T21:56:54Z",
+          "completed_at": "2026-10-12T21:56:58Z"
+        },
+        {
+          "name": "Verificar integridade e carregar imagem aprovada",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-12T21:56:58Z",
+          "completed_at": "2026-10-12T21:57:05Z"
+        },
+        {
+          "name": "Preparar credenciais descartaveis",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-12T21:57:05Z",
+          "completed_at": "2026-10-12T21:57:05Z"
+        },
+        {
+          "name": "Validar Compose e implantar API com SQL Server",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-12T21:57:05Z",
+          "completed_at": "2026-10-12T21:57:31Z"
+        },
+        {
+          "name": "Smoke HTTP com SQL Server real",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-12T21:57:31Z",
+          "completed_at": "2026-10-12T21:57:32Z"
+        },
+        {
+          "name": "Reiniciar servicos preservando volume",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-12T21:57:32Z",
+          "completed_at": "2026-10-12T21:57:54Z"
+        },
+        {
+          "name": "Capturar tela real e estado dos containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-12T21:57:54Z",
+          "completed_at": "2026-10-12T21:58:02Z"
+        },
+        {
+          "name": "Coletar logs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-12T21:58:02Z",
+          "completed_at": "2026-10-12T21:58:03Z"
+        },
+        {
+          "name": "Publicar evidencias",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-12T21:58:03Z",
+          "completed_at": "2026-10-12T21:58:04Z"
+        },
+        {
+          "name": "Resumo do deploy",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-12T21:58:04Z",
+          "completed_at": "2026-10-12T21:58:04Z"
+        },
+        {
+          "name": "Limpar ambiente temporario",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-12T21:58:04Z",
+          "completed_at": "2026-10-12T21:58:14Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-12T21:58:14Z",
+          "completed_at": "2026-10-12T21:58:15Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-12T21:58:15Z",
+          "completed_at": "2026-10-12T21:58:15Z"
+        }
+      ]
+    },
+    {
+      "id": 115025858317,
+      "name": "Deploy producao / Implantar e validar production",
+      "html_url": "https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/38313648214/job/115025858317",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-12T21:58:20Z",
+      "completed_at": "2026-10-12T21:59:41Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-12T21:58:20Z",
+          "completed_at": "2026-10-12T21:58:21Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-12T21:58:21Z",
+          "completed_at": "2026-10-12T21:58:22Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-12T21:58:22Z",
+          "completed_at": "2026-10-12T21:58:23Z"
+        },
+        {
+          "name": "Verificar integridade e carregar imagem aprovada",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-12T21:58:23Z",
+          "completed_at": "2026-10-12T21:58:28Z"
+        },
+        {
+          "name": "Preparar credenciais descartaveis",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-12T21:58:28Z",
+          "completed_at": "2026-10-12T21:58:28Z"
+        },
+        {
+          "name": "Validar Compose e implantar API com SQL Server",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-12T21:58:28Z",
+          "completed_at": "2026-10-12T21:58:54Z"
+        },
+        {
+          "name": "Smoke HTTP com SQL Server real",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-12T21:58:54Z",
+          "completed_at": "2026-10-12T21:58:55Z"
+        },
+        {
+          "name": "Reiniciar servicos preservando volume",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-12T21:58:55Z",
+          "completed_at": "2026-10-12T21:59:17Z"
+        },
+        {
+          "name": "Capturar tela real e estado dos containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-12T21:59:17Z",
+          "completed_at": "2026-10-12T21:59:28Z"
+        },
+        {
+          "name": "Coletar logs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-12T21:59:28Z",
+          "completed_at": "2026-10-12T21:59:28Z"
+        },
+        {
+          "name": "Publicar evidencias",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-12T21:59:28Z",
+          "completed_at": "2026-10-12T21:59:29Z"
+        },
+        {
+          "name": "Resumo do deploy",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-12T21:59:29Z",
+          "completed_at": "2026-10-12T21:59:29Z"
+        },
+        {
+          "name": "Limpar ambiente temporario",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-12T21:59:29Z",
+          "completed_at": "2026-10-12T21:59:39Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-12T21:59:39Z",
+          "completed_at": "2026-10-12T21:59:39Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-12T21:59:39Z",
+          "completed_at": "2026-10-12T21:59:39Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11776335461,
+      "name": "evidencias-staging-2",
+      "size_in_bytes": 85774,
+      "expired": false,
+      "created_at": "2026-10-12T21:58:04Z",
+      "expires_at": "2026-11-11T21:58:03Z",
+      "digest": "sha256:3bd99d7e8154cf9eae2675fdad3a0ab16aa05d072deabbf75af4de032d69faa5"
+    },
+    {
+      "id": 11775961122,
+      "name": "imagem-ec55375fe5c21bb0d1fe99ec6635b407a94121b7",
+      "size_in_bytes": 97124473,
+      "expired": false,
+      "created_at": "2026-10-12T21:56:45Z",
+      "expires_at": "2026-10-19T21:56:44Z",
+      "digest": "sha256:8cf99cfc837e6df76769250f187d62e0c9ac05273ebe1ab8f7866a426f5612ee"
+    },
+    {
+      "id": 11775384592,
+      "name": "evidencias-production-2",
+      "size_in_bytes": 85042,
+      "expired": false,
+      "created_at": "2026-10-12T21:59:29Z",
+      "expires_at": "2026-11-11T21:59:28Z",
+      "digest": "sha256:1523b632fe61fec87db4e93939d7a122d9d690946db180b0a42029b76ad2974f"
+    },
+    {
+      "id": 11775189536,
+      "name": "testes-2",
+      "size_in_bytes": 30826,
+      "expired": false,
+      "created_at": "2026-10-12T21:56:08Z",
+      "expires_at": "2027-01-10T21:55:41Z",
+      "digest": "sha256:be2c3a003865d87171031f4fc4dc56c355cd0926f05f9013c291da9152c063cf"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+NAME                               IMAGE                                                    COMMAND                  SERVICE     CREATED          STATUS                    PORTS
+ecocoleta-production-api-1         ecocoleta-api:ec55375fe5c21bb0d1fe99ec6635b407a94121b7   "dotnet EcoColeta.Ap…"   api         45 seconds ago   Up 16 seconds (healthy)   127.0.0.1:8082->8080/tcp
+ecocoleta-production-sqlserver-1   mcr.microsoft.com/mssql/server:2022-latest               "/opt/mssql/bin/laun…"   sqlserver   45 seconds ago   Up 22 seconds (healthy)   1433/tcp

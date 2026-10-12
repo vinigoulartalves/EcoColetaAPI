@@ -1,0 +1,9 @@
+Trechos do log real da execucao #2 (38313648214).
+Selecao limitada aos resultados; metadados do runner e configuracoes omitidos.
+
+2026-10-12T21:55:58.5505715Z Build succeeded.
+2026-10-12T21:55:58.5506400Z     0 Warning(s)
+2026-10-12T21:55:58.5506949Z     0 Error(s)
+2026-10-12T21:56:07.8014252Z Passed!  - Failed:     0, Passed:    11, Skipped:     0, Total:    11, Duration: 3 s - EcoColeta.Tests.dll (net8.0)
+2026-10-12T21:56:33.0294738Z #16 writing image sha256:3257183f0e1edfeafeedae72abbea8b6bb19d2663d418a2b8258cb1ef78d1c3c done
+2026-10-12T21:56:33.0295433Z #16 naming to docker.io/library/ecocoleta-api:ec55375fe5c21bb0d1fe99ec6635b407a94121b7 done

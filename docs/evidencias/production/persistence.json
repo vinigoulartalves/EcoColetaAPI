@@ -1,0 +1,26 @@
+{
+  "timestamp_utc": "2026-10-12T21:59:17.201469+00:00",
+  "health": {
+    "status": "Healthy",
+    "database": "Connected",
+    "environment": "Production",
+    "version": "ec55375fe5c21bb0d1fe99ec6635b407a94121b7"
+  },
+  "point_id": 4,
+  "occupancy_kg": 81.0,
+  "result": "PASS",
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "method": "GET",
+      "path": "/api/pontos-coleta/4",
+      "status": 200,
+      "result": "PASS"
+    }
+  ]
+}

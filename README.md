@@ -208,3 +208,15 @@ O checklist consolidado com o estado verificado da entrega está no final de [do
 - [Docker: referência dos serviços Compose](https://docs.docker.com/reference/compose-file/services/)
 - [Microsoft: contêineres no .NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8/containers)
 - [GitHub: ambientes de implantação](https://docs.github.com/en/actions/concepts/workflows-and-actions/deployment-environments)
+
+## Checklist obrigatório preenchido
+
+| Item | OK |
+|---|---|
+| Projeto compactado em ZIP com estrutura organizada | [x] |
+| Dockerfile funcional | [x] Construído e executado no pipeline |
+| docker-compose.yml ou arquivos Kubernetes | [x] API + SQL Server, rede, volume e variáveis |
+| Pipeline com build, teste e deploy | [x] Execução #2 aprovada |
+| README com instruções e prints | [x] Instruções e links para capturas reais |
+| Documentação técnica com evidências (PDF ou PPT) | [x] PDF acompanha o ZIP |
+| Deploy em staging e produção | [x] Dois ambientes acadêmicos temporários validados |
