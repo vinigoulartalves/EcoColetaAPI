@@ -1,0 +1,78 @@
+{
+  "source_run": "https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/38313648214",
+  "counters": {
+    "total": "11",
+    "executed": "11",
+    "passed": "11",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "results": [
+    {
+      "testName": "EcoColeta.Tests.Controllers.PontosColetaControllerTests.Get_ReturnsHttpStatusCode200",
+      "outcome": "Passed",
+      "duration": "00:00:02.7966299"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.HealthControllerTests.Readiness_DeveInformarBancoEAmbiente",
+      "outcome": "Passed",
+      "duration": "00:00:00.0058673"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.RegistrosResiduosAlertaTests.RegistrarAcimaDe80PorCento_DeveGerarAlerta",
+      "outcome": "Passed",
+      "duration": "00:00:03.1114606"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.AuthControllerTests.EndpointProtegido_SemToken_DeveRetornar401",
+      "outcome": "Passed",
+      "duration": "00:00:00.0104800"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.AuthControllerTests.LoginValido_DeveRetornarToken",
+      "outcome": "Passed",
+      "duration": "00:00:02.9723554"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.HealthControllerTests.Liveness_DeveRetornar200SemAutenticacao",
+      "outcome": "Passed",
+      "duration": "00:00:00.5136457"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.AlertasColetaControllerTests.Get_ReturnsHttpStatusCode200",
+      "outcome": "Passed",
+      "duration": "00:00:00.4577227"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.DestinacoesResiduosControllerTests.Get_ReturnsHttpStatusCode200",
+      "outcome": "Passed",
+      "duration": "00:00:02.7935011"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.RelatoriosImpactoControllerTests.Get_ReturnsHttpStatusCode200",
+      "outcome": "Passed",
+      "duration": "00:00:00.5931380"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.RegistrosResiduosControllerTests.Get_ReturnsHttpStatusCode200",
+      "outcome": "Passed",
+      "duration": "00:00:00.5137207"
+    },
+    {
+      "testName": "EcoColeta.Tests.Controllers.HealthControllerTests.Swagger_Desabilitado_NaoDeveExporEspecificacao",
+      "outcome": "Passed",
+      "duration": "00:00:00.0037777"
+    }
+  ]
+}

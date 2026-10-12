@@ -1,0 +1,67 @@
+{
+  "timestamp_utc": "2026-10-12T21:57:32.112480+00:00",
+  "health": {
+    "status": "Healthy",
+    "database": "Connected",
+    "environment": "Staging",
+    "version": "ec55375fe5c21bb0d1fe99ec6635b407a94121b7"
+  },
+  "point_id": 4,
+  "result": "PASS",
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "method": "GET",
+      "path": "/health/live",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "path": "/api/pontos-coleta",
+      "status": 401,
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "path": "/api/pontos-coleta",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "path": "/api/registros-residuos",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "method": "GET",
+      "path": "/api/alertas-coleta?resolvido=false&pontoColetaId=4",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "method": "GET",
+      "path": "/api/relatorios-impacto/resumo",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "method": "GET",
+      "path": "/swagger/v1/swagger.json",
+      "status": 200,
+      "result": "PASS"
+    }
+  ]
+}
