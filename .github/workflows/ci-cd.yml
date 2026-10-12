@@ -1,0 +1,73 @@
+name: EcoColeta CI/CD
+on:
+  push:
+    branches: [main, 'codex/devops-atividade']
+    paths-ignore: ['docs/**', '**.md']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ecocoleta-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-test-image:
+    name: Build, testes e imagem
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restaurar dependencias
+        run: dotnet restore EcoColeta.sln
+      - name: Build Release
+        run: dotnet build EcoColeta.sln -c Release --no-restore
+      - name: Testes de integracao e cobertura
+        run: dotnet test EcoColeta.sln -c Release --no-build --logger 'trx;LogFileName=tests.trx' --results-directory artifacts/tests --collect:'XPlat Code Coverage'
+      - name: Publicar resultados dos testes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testes-${{ github.run_number }}
+          path: artifacts/tests/
+          if-no-files-found: error
+      - name: Construir imagem unica
+        run: docker build --build-arg APP_VERSION=${{ github.sha }} -t ecocoleta-api:${{ github.sha }} .
+      - name: Exportar imagem e checksum
+        run: |
+          mkdir -p artifacts/image
+          docker save ecocoleta-api:${{ github.sha }} | gzip > artifacts/image/api.tar.gz
+          cd artifacts/image
+          sha256sum api.tar.gz > api.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: imagem-${{ github.sha }}
+          path: artifacts/image/
+          compression-level: 0
+          retention-days: 7
+
+  staging:
+    name: Deploy staging
+    needs: build-test-image
+    if: github.event_name != 'pull_request'
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment: staging
+      aspnet_environment: Staging
+      port: 8081
+
+  production:
+    name: Deploy producao
+    needs: staging
+    if: github.event_name != 'pull_request'
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment: production
+      aspnet_environment: Production
+      port: 8082

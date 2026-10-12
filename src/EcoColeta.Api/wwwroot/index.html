@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EcoColeta | Operação</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf3ef;color:#123c31;font:17px system-ui,sans-serif}main{max-width:1080px;margin:70px auto;padding:36px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #bdd3c7;padding-bottom:24px}.brand{font-size:29px;font-weight:800}.tag{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#39705e}h1{font-size:52px;letter-spacing:-2px;margin:48px 0 10px}p{color:#526e63;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:36px 0}.card{background:white;border:1px solid #d4e3db;border-radius:18px;padding:27px}.label{display:block;color:#61766c;font-size:14px;margin-bottom:14px}.value{font-size:23px;font-weight:700}.good{color:#138559}.bad{color:#b63232}code{overflow-wrap:anywhere;font-size:14px}.foot{border-top:1px solid #bdd3c7;margin-top:35px;padding-top:20px;font-size:14px}a{color:#136c52}#time{font-size:13px;color:#697e74}@media(max-width:650px){main{margin:0;padding:24px}.grid{grid-template-columns:1fr}h1{font-size:36px}}
+</style></head>
+<body><main><header><span class="brand">EcoColeta<span style="color:#38a879">.</span></span><span class="tag">Cidades ESG Inteligentes</span></header>
+<h1>Gestão de resíduos.<br>Operação monitorada.</h1><p>API para coleta seletiva urbana, destinação de resíduos e indicadores ambientais.</p>
+<div class="grid"><div class="card"><span class="label">AMBIENTE</span><span class="value" id="environment">Verificando...</span></div><div class="card"><span class="label">API</span><span class="value" id="status">Verificando...</span></div><div class="card"><span class="label">SQL SERVER</span><span class="value" id="database">Verificando...</span></div></div>
+<div class="card"><span class="label">VERSÃO IMPLANTADA</span><code id="version">Aguardando resposta da API</code><p id="time"></p></div>
+<p><a href="/health/ready">Verificar prontidão</a> &nbsp;·&nbsp; <a href="/api/pontos-coleta">Consultar pontos de coleta</a> &nbsp;·&nbsp; <a href="/api/relatorios-impacto/resumo">Impacto ambiental</a></p>
+<div class="foot">FIAP · Navegando pelo mundo DevOps · Vinícius Goulart Alves</div></main>
+<script>
+async function check(){try{const r=await fetch('/health/ready',{cache:'no-store'});if(!r.ok)throw Error('unhealthy');const d=await r.json();document.getElementById('environment').textContent=d.environment;document.getElementById('version').textContent=d.version;for(const [id,text] of [['status','Saudável'],['database','Conectado']]){const el=document.getElementById(id);el.textContent=text;el.className='value good'}document.getElementById('time').textContent='Verificação real: '+new Date().toISOString()}catch{for(const id of ['status','database']){const el=document.getElementById(id);el.textContent='Indisponível';el.className='value bad'}}}check();setInterval(check,15000);
+</script></body></html>

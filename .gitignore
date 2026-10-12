@@ -23,3 +23,14 @@ Thumbs.db
 
 ## Logs
 *.log
+
+## DevOps: secrets and generated artifacts
+.env
+.env.*
+!.env.example
+!*.env.example
+artifacts/
+TestResults/
+*.tar
+*.zip
+__pycache__/

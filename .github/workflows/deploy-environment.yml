@@ -1,0 +1,85 @@
+name: Deploy de ambiente academico
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      aspnet_environment:
+        required: true
+        type: string
+      port:
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Implantar e validar ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: ${{ inputs.environment }}
+    env:
+      COMPOSE_PROJECT_NAME: ecocoleta-${{ inputs.environment }}
+      API_IMAGE: ecocoleta-api:${{ github.sha }}
+      APP_ENVIRONMENT: ${{ inputs.aspnet_environment }}
+      API_PORT: ${{ inputs.port }}
+      EVIDENCE: artifacts/${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: imagem-${{ github.sha }}
+          path: artifacts/image
+      - name: Verificar integridade e carregar imagem aprovada
+        run: |
+          cd artifacts/image
+          sha256sum -c api.tar.gz.sha256
+          gunzip -c api.tar.gz | docker load
+      - name: Preparar credenciais descartaveis
+        run: python3 scripts/ci-env.py
+      - name: Validar Compose e implantar API com SQL Server
+        run: |
+          docker compose config --quiet
+          docker compose up -d --no-build --wait --wait-timeout 240
+      - name: Smoke HTTP com SQL Server real
+        run: python3 scripts/smoke.py --url http://127.0.0.1:$API_PORT --environment "$APP_ENVIRONMENT" --version '${{ github.sha }}' --output "$EVIDENCE"
+      - name: Reiniciar servicos preservando volume
+        run: |
+          docker compose stop
+          docker compose up -d --no-build --wait --wait-timeout 240
+          python3 scripts/smoke.py --url http://127.0.0.1:$API_PORT --environment "$APP_ENVIRONMENT" --version '${{ github.sha }}' --output "$EVIDENCE" --verify-persistence
+      - name: Capturar tela real e estado dos containers
+        run: bash scripts/capture.sh http://127.0.0.1:$API_PORT "$EVIDENCE"
+      - name: Coletar logs
+        if: always()
+        run: |
+          mkdir -p "$EVIDENCE"
+          docker compose logs --no-color > "$EVIDENCE/compose.log" 2>&1 || true
+          docker compose ps -a > "$EVIDENCE/compose-final.txt" 2>&1 || true
+      - name: Publicar evidencias
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-${{ inputs.environment }}-${{ github.run_number }}
+          path: artifacts/${{ inputs.environment }}/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Resumo do deploy
+        if: success()
+        run: |
+          {
+            echo '### Deploy validado: ${{ inputs.environment }}'
+            echo '- API e SQL Server saudaveis; smoke e persistencia aprovados.'
+            echo '- Imagem: `ecocoleta-api:${{ github.sha }}`'
+            echo '- Evidencias: artefato evidencias-${{ inputs.environment }}-${{ github.run_number }}.'
+            echo '- Ambiente academico temporario no runner; encerrado ao final do job.'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Limpar ambiente temporario
+        if: always()
+        run: |
+          docker compose down --volumes --remove-orphans || true
+          rm -f .env
