@@ -26,6 +26,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Executar API, banco isolado, BDD e contratos
         run: bash scripts/bdd/run.sh
+      - name: Capturar telas das configurações e resultados
+        run: |
+          npm install --no-save --prefix "$RUNNER_TEMP/ecocoleta-browser" playwright@1.51.1
+          node "$RUNNER_TEMP/ecocoleta-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          NODE_PATH="$RUNNER_TEMP/ecocoleta-browser/node_modules" node scripts/bdd/capture-evidence.cjs
       - name: Publicar resumo
         if: always()
         run: |

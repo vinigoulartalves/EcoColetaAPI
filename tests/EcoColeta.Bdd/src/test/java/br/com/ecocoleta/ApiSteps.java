@@ -247,7 +247,7 @@ public class ApiSteps {
         String name = response.jsonPath().getString("nome");
         call("GET", "/api/pontos-coleta/${pontoId}", null); expect(200); schema("ponto");
         assertEquals(name, response.jsonPath().getString("nome"));
-        assertEquals(150, response.jsonPath().getInt("capacidadeMaximaKg"));
+        numberField("capacidadeMaximaKg", "150");
     }
     @Então("o alerta resolvido deve estar persistido")
     public void resolvedPersisted() {

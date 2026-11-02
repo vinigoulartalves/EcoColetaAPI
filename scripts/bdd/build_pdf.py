@@ -43,7 +43,7 @@ def table(rows,widths):
     for cell in rows[0]:cell.style=ParagraphStyle(name='th',parent=styles['SmallBDD'],fontName='SansBold',textColor=colors.white)
     story.append(t)
 def shot(file,caption,maxheight=360):
-    path=OUT/'evidence'/file
+    path=EVIDENCE/'screenshots'/file
     if not path.exists():raise FileNotFoundError(path)
     from PIL import Image as PI
     with PI.open(path) as im:w,h=im.size
@@ -98,15 +98,17 @@ def main():
     p('São verificados a resolução persistida, a rejeição de resolução repetida, o ID inexistente, o recálculo sem duplicação, a resolução automática quando o percentual cai abaixo de 80% e a substituição de atenção por crítico.')
     sub('Relatório de impacto')
     p('O cenário captura os totais atuais, registra mais 12 kg de plástico e confere a diferença no total e no agrupamento por tipo. Também valida a fórmula total × 0,75, com arredondamento a duas casas. Essa fórmula é uma estimativa implementada pelo projeto, sem comprovação científica de benefício ambiental.')
+    sub('Correção revelada pelos testes')
+    p('Os contratos detectaram que o SQL Server não preservava DateTime.Kind na leitura de datetime2, removendo o sufixo UTC nas consultas. Foi aplicado um conversor no modelo para restaurar UTC na materialização, sem alterar as tabelas. O contrato manteve a exigência de date-time e a consulta após criação verifica essa regressão.')
     sub('Contratos e erros')
     p('Os schemas usam draft-04 e verificam campos obrigatórios, tipos, enums, limites e propriedades extras. Há contratos separados para erros de negócio e ValidationProblemDetails. Respostas 401 do middleware JWT não possuem corpo e são verificadas pela ausência de conteúdo.')
     p('Cinco testes independentes comprovam o funcionamento do validador: aceitação de um contrato válido e rejeição de campo ausente, tipo incorreto, enum desconhecido e campo não documentado. Eles complementam os cenários HTTP.')
     story.append(PageBreak());h('5. Configurações - prints')
     p('As capturas seguintes mostram os arquivos efetivamente usados na execução. São visualizações locais dos arquivos, sem credenciais temporárias.')
-    shot('config-pom.png','Figura 1. Dependências e runner Maven do módulo de testes.',325)
-    shot('config-workflow.png','Figura 2. Workflow exclusivo para execução BDD contra SQL Server.',325)
+    shot('config-pom.png','Figura 1. Dependências do módulo de testes (trecho do pom.xml).',275)
+    shot('config-workflow.png','Figura 2. Workflow exclusivo para execução BDD contra SQL Server (trecho).',275)
     story.append(PageBreak());h('6. Evidências de execução')
-    p(f"A execução final aprovou {summary['scenarios']} cenários BDD e os 5 testes independentes do validador: 58 testes, sem falhas ou erros. A aplicação e o banco foram executados em containers no runner do GitHub Actions.")
+    p(f"A execução final aprovou {summary['scenarios']} cenários BDD e os 5 testes independentes do validador, sem falhas ou erros. A aplicação e o banco foram executados em containers no runner do GitHub Actions.")
     p('Run: '+str(run['id'])+' | Resultado: '+run['conclusion']+' | Commit: '+commit[:12],'SmallBDD')
     shot('cucumber-report.png','Figura 3. Relatório Cucumber da execução real, com os cenários aprovados.',380)
     shot('ci-log.png','Figura 4. Trecho do log bruto da execução Maven, visualizado localmente.',230)
