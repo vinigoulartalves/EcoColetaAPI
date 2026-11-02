@@ -38,7 +38,7 @@ services:
       ADMIN_EMAIL: admin@ecocoleta.test
       ADMIN_PASSWORD: ${BDD_ADMIN_PASSWORD}
     volumes:
-      - ./artifacts/bdd:/suite/target
+      - ./artifacts/bdd:/reports
     depends_on:
       api:
         condition: service_healthy

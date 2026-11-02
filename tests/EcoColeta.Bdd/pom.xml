@@ -18,7 +18,7 @@
   <build><plugins>
     <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.13.0</version></plugin>
     <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.2</version>
-      <configuration><includes><include>**/RunCucumberTest.java</include><include>**/ContractValidationTest.java</include></includes><systemPropertyVariables><file.encoding>UTF-8</file.encoding></systemPropertyVariables></configuration>
+      <configuration><includes><include>**/RunCucumberTest.java</include><include>**/ContractValidationTest.java</include></includes><argLine>-Dfile.encoding=UTF-8</argLine></configuration>
     </plugin>
   </plugins></build>
 </project>
