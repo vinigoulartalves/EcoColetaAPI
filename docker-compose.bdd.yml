@@ -1,0 +1,46 @@
+# Ambiente exclusivo de testes. Não reutiliza volumes, portas ou credenciais de produção.
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${BDD_SQL_PASSWORD:?Execute scripts/bdd/run.sh}
+    healthcheck:
+      test: ["CMD-SHELL", "SQLCMDPASSWORD=\"$$MSSQL_SA_PASSWORD\" /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -C -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 5s
+      timeout: 5s
+      start_period: 30s
+      retries: 36
+    volumes:
+      - bdd-sqldata:/var/opt/mssql
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_VERSION: bdd-tests
+    environment:
+      ASPNETCORE_ENVIRONMENT: Testing
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=EcoColetaBdd;User Id=sa;Password=${BDD_SQL_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      Jwt__ChaveSecreta: ${BDD_JWT_SECRET:?Execute scripts/bdd/run.sh}
+      Seed__AdminEmail: admin@ecocoleta.test
+      Seed__AdminPassword: ${BDD_ADMIN_PASSWORD:?Execute scripts/bdd/run.sh}
+      Swagger__Enabled: "true"
+      Https__UseRedirection: "false"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+  bdd-tests:
+    build: tests/EcoColeta.Bdd
+    environment:
+      BASE_URL: http://api:8080
+      ADMIN_EMAIL: admin@ecocoleta.test
+      ADMIN_PASSWORD: ${BDD_ADMIN_PASSWORD}
+    volumes:
+      - ./artifacts/bdd:/reports
+    depends_on:
+      api:
+        condition: service_healthy
+volumes:
+  bdd-sqldata:

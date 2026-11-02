@@ -1,3 +1,5 @@
+> **Entrega FIAP - Testes Automatizados:** [instruções de execução BDD](docs/bdd/README.md), [matriz de cobertura](docs/bdd/coverage.md) e [execução validada](https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/41446209422). Para executar: `bash scripts/bdd/run.sh`.
+
 # Projeto - Cidades ESG Inteligentes
 
 ## EcoColeta API | Navegando pelo mundo DevOps
@@ -220,3 +222,13 @@ O checklist consolidado com o estado verificado da entrega está no final de [do
 | README com instruções e prints | [x] Instruções e links para capturas reais |
 | Documentação técnica com evidências (PDF ou PPT) | [x] PDF acompanha o ZIP |
 | Deploy em staging e produção | [x] Dois ambientes acadêmicos temporários validados |
+
+## Atividade: Testes Automatizados BDD
+
+Suíte Java/Cucumber/REST Assured com cenários positivos e negativos, contratos JSON Schema e cobertura das 16 operações HTTP existentes, incluindo saúde. Execução isolada contra API + SQL Server:
+
+```bash
+bash scripts/bdd/run.sh
+```
+
+[Instruções completas](docs/bdd/README.md) · [Matriz de cobertura](docs/bdd/coverage.md) · Workflow: **EcoColeta BDD e contratos**.

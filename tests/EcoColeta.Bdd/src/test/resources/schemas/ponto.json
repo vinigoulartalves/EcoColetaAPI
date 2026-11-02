@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "id",
+    "nome",
+    "endereco",
+    "bairro",
+    "cidade",
+    "latitude",
+    "longitude",
+    "tipoResiduoAceito",
+    "capacidadeMaximaKg",
+    "ocupacaoAtualKg",
+    "percentualOcupacao",
+    "ativo",
+    "criadoEm"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "endereco": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bairro": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cidade": {
+      "type": "string",
+      "minLength": 1
+    },
+    "latitude": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "longitude": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "tipoResiduoAceito": {
+      "type": "string",
+      "enum": [
+        "Plastico",
+        "Papel",
+        "Vidro",
+        "Metal",
+        "Organico",
+        "Eletronico",
+        "PilhasBaterias",
+        "OleoCozinha",
+        "Outros"
+      ]
+    },
+    "capacidadeMaximaKg": {
+      "type": "number",
+      "minimum": 1
+    },
+    "ocupacaoAtualKg": {
+      "type": "number",
+      "minimum": 0
+    },
+    "percentualOcupacao": {
+      "type": "number",
+      "minimum": 0
+    },
+    "ativo": {
+      "type": "boolean"
+    },
+    "criadoEm": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

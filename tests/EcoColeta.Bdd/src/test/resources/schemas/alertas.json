@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "itens",
+    "paginaAtual",
+    "tamanhoPagina",
+    "totalItens",
+    "totalPaginas"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "itens": {
+      "type": "array",
+      "items": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "pontoColetaId",
+          "nomePontoColeta",
+          "nivel",
+          "mensagem",
+          "resolvido",
+          "criadoEm",
+          "resolvidoEm"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pontoColetaId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "nomePontoColeta": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nivel": {
+            "type": "string",
+            "enum": [
+              "Atencao",
+              "Critico"
+            ]
+          },
+          "mensagem": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resolvido": {
+            "type": "boolean"
+          },
+          "criadoEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "resolvidoEm": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "paginaAtual": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "tamanhoPagina": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "totalItens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "totalPaginas": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

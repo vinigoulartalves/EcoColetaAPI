@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "itens",
+    "paginaAtual",
+    "tamanhoPagina",
+    "totalItens",
+    "totalPaginas"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "itens": {
+      "type": "array",
+      "items": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "pontoColetaId",
+          "nomePontoColeta",
+          "tipoResiduo",
+          "pesoKg",
+          "origem",
+          "observacao",
+          "registradoEm"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pontoColetaId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "nomePontoColeta": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tipoResiduo": {
+            "type": "string",
+            "enum": [
+              "Plastico",
+              "Papel",
+              "Vidro",
+              "Metal",
+              "Organico",
+              "Eletronico",
+              "PilhasBaterias",
+              "OleoCozinha",
+              "Outros"
+            ]
+          },
+          "pesoKg": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 10000
+          },
+          "origem": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "registradoEm": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "paginaAtual": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "tamanhoPagina": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "totalItens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "totalPaginas": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "statusCode",
+    "mensagem",
+    "detalhe",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "statusCode": {
+      "type": "integer",
+      "enum": [
+        400,
+        401,
+        404
+      ]
+    },
+    "mensagem": {
+      "type": "string",
+      "minLength": 1
+    },
+    "detalhe": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
