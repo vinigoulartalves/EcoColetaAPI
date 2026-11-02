@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "id",
+    "tipoResiduo",
+    "descricao",
+    "instrucoesDescarte",
+    "reciclavel",
+    "riscoAmbiental"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "tipoResiduo": {
+      "type": "string",
+      "enum": [
+        "Plastico",
+        "Papel",
+        "Vidro",
+        "Metal",
+        "Organico",
+        "Eletronico",
+        "PilhasBaterias",
+        "OleoCozinha",
+        "Outros"
+      ]
+    },
+    "descricao": {
+      "type": "string",
+      "minLength": 1
+    },
+    "instrucoesDescarte": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reciclavel": {
+      "type": "boolean"
+    },
+    "riscoAmbiental": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

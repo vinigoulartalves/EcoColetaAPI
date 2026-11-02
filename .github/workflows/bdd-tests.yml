@@ -1,0 +1,42 @@
+name: EcoColeta BDD e contratos
+on:
+  push:
+    branches: [main, 'codex/testes-bdd']
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/bdd/**'
+      - 'docker-compose.bdd.yml'
+      - 'Dockerfile'
+      - '.github/workflows/bdd-tests.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ecocoleta-bdd-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bdd-sqlserver:
+    name: BDD HTTP com SQL Server real
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Executar API, banco isolado, BDD e contratos
+        run: bash scripts/bdd/run.sh
+      - name: Publicar resumo
+        if: always()
+        run: |
+          if [ -f artifacts/bdd/summary.md ]; then cat artifacts/bdd/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Publicar relatórios e evidências
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecocoleta-bdd-${{ github.run_number }}
+          path: |
+            artifacts/bdd/
+            artifacts/bdd-execution.log
+          if-no-files-found: error
+          retention-days: 30

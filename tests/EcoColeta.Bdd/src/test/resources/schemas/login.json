@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "token",
+    "expiraEm",
+    "nome",
+    "email",
+    "role"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "token": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expiraEm": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "Admin"
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "totalResiduosRegistradosKg",
+    "residuosPorTipo",
+    "pontosColetaAtivos",
+    "alertasAbertos",
+    "estimativaImpactoPositivoKg",
+    "geradoEm"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "totalResiduosRegistradosKg": {
+      "type": "number",
+      "minimum": 0
+    },
+    "residuosPorTipo": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "pontosColetaAtivos": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "alertasAbertos": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "estimativaImpactoPositivoKg": {
+      "type": "number",
+      "minimum": 0
+    },
+    "geradoEm": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

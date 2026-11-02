@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "id",
+    "pontoColetaId",
+    "nomePontoColeta",
+    "nivel",
+    "mensagem",
+    "resolvido",
+    "criadoEm",
+    "resolvidoEm"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "pontoColetaId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nomePontoColeta": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nivel": {
+      "type": "string",
+      "enum": [
+        "Atencao",
+        "Critico"
+      ]
+    },
+    "mensagem": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resolvido": {
+      "type": "boolean"
+    },
+    "criadoEm": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolvidoEm": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  }
+}
