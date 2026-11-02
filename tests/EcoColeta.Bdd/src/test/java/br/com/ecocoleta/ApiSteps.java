@@ -101,7 +101,7 @@ public class ApiSteps {
         try { return JSON.writeValueAsString(value); } catch (Exception e) { throw new IllegalArgumentException(e); }
     }
     private void schema(String name) {
-        assertTrue(response.contentType().contains("application/json"), "Content-Type deve ser JSON");
+        assertTrue(response.contentType().contains("application/json") || response.contentType().contains("application/problem+json"), "Content-Type deve ser JSON ou Problem JSON");
         response.then().body(matchesJsonSchemaInClasspath("schemas/" + name + ".json"));
     }
     @Dado("que estou autenticado como administrador")
@@ -132,15 +132,15 @@ public class ApiSteps {
         point.put("ativo", false);
         call("PUT", "/api/pontos-coleta/${pontoId}", toJson(point)); expect(200); schema("ponto");
     }
-    @Dado("que foram registrados {double} kg de plástico no ponto")
-    public void deposit(double weight) {
+    @Dado("que foram registrados {word} kg de plástico no ponto")
+    public void deposit(String weight) {
         call("POST", "/api/registros-residuos", toJson(Map.of("pontoColetaId", Integer.parseInt(variables.get("pontoId")),
-            "tipoResiduo", 1, "pesoKg", weight, "origem", "BDD FIAP")));
+            "tipoResiduo", 1, "pesoKg", new BigDecimal(weight), "origem", "BDD FIAP")));
         expect(201); schema("registro");
     }
     @Dado("que existe um alerta aberto no ponto")
     public void openAlert() {
-        createPoint(100); deposit(80);
+        createPoint(100); deposit("80");
         call("GET", "/api/alertas-coleta?pontoColetaId=${pontoId}&resolvido=false", null);
         expect(200); schema("alertas"); assertEquals(1, response.jsonPath().getInt("totalItens"));
         variables.put("alertaId", response.jsonPath().getString("itens[0].id"));
@@ -187,9 +187,9 @@ public class ApiSteps {
         assertNotNull(actual, "Campo numérico ausente: " + path);
         return new BigDecimal(actual.toString());
     }
-    @Então("o campo numérico {string} deve ser {double}")
-    public void numberField(String path, double expected) {
-        assertEquals(0, decimal(path).compareTo(BigDecimal.valueOf(expected)), path);
+    @Então("o campo numérico {string} deve ser {word}")
+    public void numberField(String path, String expected) {
+        assertEquals(0, decimal(path).compareTo(new BigDecimal(expected)), path);
     }
     @Então("a mensagem deve conter {string}")
     public void message(String expected) { assertTrue(response.jsonPath().getString("mensagem").contains(expected)); }
@@ -207,8 +207,8 @@ public class ApiSteps {
         call("GET", "/api/pontos-coleta/" + id, null); expect(200); schema("ponto");
         assertEquals(name, response.jsonPath().getString("nome"));
     }
-    @Então("a ocupação do ponto deve ser {double} kg")
-    public void occupation(double expected) {
+    @Então("a ocupação do ponto deve ser {word} kg")
+    public void occupation(String expected) {
         call("GET", "/api/pontos-coleta/${pontoId}", null); expect(200); schema("ponto"); numberField("ocupacaoAtualKg", expected);
     }
     @Então("deve haver {int} registros no ponto")
@@ -225,12 +225,12 @@ public class ApiSteps {
             assertEquals(Integer.parseInt(variables.get("pontoId")), response.jsonPath().getInt("itens[0].pontoColetaId"));
         }
     }
-    @Então("o relatório deve refletir mais {double} kg de plástico")
-    public void reportDelta(double weight) {
+    @Então("o relatório deve refletir mais {word} kg de plástico")
+    public void reportDelta(String weight) {
         call("GET", "/api/relatorios-impacto/resumo", null); expect(200); schema("relatorio");
-        BigDecimal expected = initialWeight.add(BigDecimal.valueOf(weight));
+        BigDecimal expected = initialWeight.add(new BigDecimal(weight));
         assertEquals(0, expected.compareTo(decimal("totalResiduosRegistradosKg")));
-        assertEquals(0, initialPlastic.add(BigDecimal.valueOf(weight)).compareTo(decimal("residuosPorTipo.Plastico")));
+        assertEquals(0, initialPlastic.add(new BigDecimal(weight)).compareTo(decimal("residuosPorTipo.Plastico")));
         assertEquals(0, expected.multiply(new BigDecimal("0.75")).setScale(2, java.math.RoundingMode.HALF_EVEN)
             .compareTo(decimal("estimativaImpactoPositivoKg")));
         assertEquals(initialActive, response.jsonPath().getInt("pontosColetaAtivos"));

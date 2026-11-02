@@ -19,7 +19,7 @@ Funcionalidade: Gestão e consulta dos pontos de coleta
   Cenário: Filtrar pontos com paginação e acesso público
     Dado que existe um ponto de coleta ativo para plástico com capacidade de 100 kg
     E que estou sem autenticação
-    Quando envio "GET" para "/api/pontos-coleta?cidade=Palhoca%20BDD&bairro=Centro%20BDD&tipoResiduo=1&ativo=true&pagina=1&tamanhoPagina=1"
+    Quando envio "GET" para "/api/pontos-coleta?cidade=Palhoca BDD&bairro=Centro BDD&tipoResiduo=1&ativo=true&pagina=1&tamanhoPagina=1"
     Então o status HTTP deve ser 200
     E o contrato JSON deve ser "pontos"
     E o campo "itens[0].cidade" deve ser "Palhoca BDD"

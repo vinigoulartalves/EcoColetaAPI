@@ -19,10 +19,11 @@ Funcionalidade: Orientações de destinação de resíduos
     E o campo "instrucoesDescarte" não deve estar vazio
 
   @DES-03
-  Cenário: Consultar tipo sem destinação
+  Cenário: Rejeitar tipo de resíduo fora do enum
     Quando envio "GET" para "/api/destinacoes-residuos/99"
-    Então o status HTTP deve ser 404
-    E o contrato JSON deve ser "erro"
+    Então o status HTTP deve ser 400
+    E o contrato JSON deve ser "validacao"
+    E o erro de validação deve mencionar "tipoResiduo"
 
   @DES-04
   Cenário: Cadastrar destinação disponível e consultar sua persistência

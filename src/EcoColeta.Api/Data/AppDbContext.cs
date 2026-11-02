@@ -1,5 +1,6 @@
 using EcoColeta.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EcoColeta.Api.Data;
 
@@ -70,5 +71,13 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Role).HasMaxLength(50).IsRequired();
             entity.HasIndex(e => e.Email).IsUnique();
         });
+        // SQL Server datetime2 does not preserve DateTime.Kind. All application dates
+        // are stored as UTC; restore that kind on reads so JSON remains RFC 3339.
+        var utcConverter = new ValueConverter<DateTime, DateTime>(
+            value => value, value => DateTime.SpecifyKind(value, DateTimeKind.Utc));
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        foreach (var property in entity.GetProperties())
+            if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                property.SetValueConverter(utcConverter);
     }
 }

@@ -15,7 +15,7 @@ bash scripts/bdd/run.sh
 
 O script gera credenciais temporárias, recria **somente** o projeto Compose `ecocoleta-bdd`, sobe SQL Server 2022 e a API real, espera a verificação de saúde, prepara a fixture e executa a suíte. Ao final, coleta logs e remove os containers e o volume desse ambiente. Não aponta para produção e não reutiliza o Compose de deploy. Não execute duas instâncias desse script simultaneamente no mesmo Docker.
 
-Os testes modificam dados. A base `EcoColetaBdd` é descartável e recriada a cada execução. Cada cenário cria pontos próprios; a execução é sequencial. Não existe DELETE público: o isolamento ocorre no ciclo de vida do banco. Para testar criação de destinação, o script remove previamente apenas a destinação `Outros` (tipo 9) do seed do ambiente isolado. A criação desse tipo ocorre em um único cenário; não há dependência de ordem entre cenários. O valor 99 é usado para consulta de tipo sem destinação.
+Os testes modificam dados. A base `EcoColetaBdd` é descartável e recriada a cada execução. Cada cenário cria pontos próprios; a execução é sequencial. Não existe DELETE público: o isolamento ocorre no ciclo de vida do banco. Para testar criação de destinação, o script remove previamente apenas a destinação `Outros` (tipo 9) do seed do ambiente isolado. A criação desse tipo ocorre em um único cenário; não há dependência de ordem entre cenários. O valor 99 é usado para validar rejeição de tipo fora do enum (400). A consulta prévia do tipo 9 valida a ausência de destinação (404).
 
 Não execute a suíte contra dados pessoais ou ambientes compartilhados. `BASE_URL` aceita somente localhost/127.0.0.1 ou o serviço `api` do Compose. Não há credenciais reais versionadas; `.env.bdd` é ignorado pelo Git e excluído no encerramento do script. Senhas e tokens são removidos das evidências HTTP.
 
@@ -90,3 +90,7 @@ A estimativa de impacto positivo é `total de resíduos × 0,75`, arredondada a 
 - https://github.com/rest-assured/rest-assured/wiki/Usage
 - https://docs.docker.com/compose/how-tos/startup-order/
 - https://docs.github.com/en/actions/writing-workflows
+
+## Correção identificada pelos contratos
+
+A execução com SQL Server detectou perda de `DateTime.Kind` ao materializar valores `datetime2`. O modelo agora restaura UTC na leitura das datas geradas em UTC pela aplicação, preservando o sufixo `Z` no JSON de consultas. Não houve alteração de tabelas. O schema mantém `format: date-time`; a verificação de criação seguida de consulta cobre essa regressão.

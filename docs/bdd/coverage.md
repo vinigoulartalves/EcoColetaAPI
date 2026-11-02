@@ -12,7 +12,7 @@ Cada ID corresponde à tag no arquivo `.feature`; esquemas de cenário expandem 
 | GET | /api/registros-residuos | REG-02 | 200 e filtros | consulta de vazio nas rejeições | registros |
 | POST | /api/registros-residuos | REG-01,03,04,05,06; AUTH-04 | 201 e atualização da ocupação | 400 peso/inativo/tipo; 404 ponto; 401 | registro |
 | GET | /api/destinacoes-residuos | DES-01 | 200 e paginação | não há falha de negócio prevista para listagem válida | destinacoes |
-| GET | /api/destinacoes-residuos/{tipoResiduo} | DES-02,03,04 | 200 e instruções | 404 sem destinação | destinacao |
+| GET | /api/destinacoes-residuos/{tipoResiduo} | DES-02,03,04 | 200 e instruções | 404 sem destinação; 400 enum inválido | destinacao |
 | POST | /api/destinacoes-residuos | DES-04,05,06; AUTH-04 | 201 e persistência | 400 duplicidade/campos; 401 | destinacao |
 | GET | /api/alertas-coleta | ALT-01,02,03,06,07,08 | 200, filtros e níveis | ausência de alerta abaixo de 80% | alertas |
 | PATCH | /api/alertas-coleta/{id}/resolver | ALT-03,04,05; AUTH-04 | 200 e persistência | 400 repetido; 404; 401 | alerta |
