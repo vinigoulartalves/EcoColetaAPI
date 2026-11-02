@@ -94,3 +94,9 @@ A estimativa de impacto positivo é `total de resíduos × 0,75`, arredondada a 
 ## Correção identificada pelos contratos
 
 A execução com SQL Server detectou perda de `DateTime.Kind` ao materializar valores `datetime2`. O modelo agora restaura UTC na leitura das datas geradas em UTC pela aplicação, preservando o sufixo `Z` no JSON de consultas. Não houve alteração de tabelas. O schema mantém `format: date-time`; a verificação de criação seguida de consulta cobre essa regressão.
+
+## Execução validada para a entrega
+
+Em 02/11/2026, a execução [41446209422](https://github.com/vinigoulartalves/EcoColetaAPI/actions/runs/41446209422) aprovou **53 cenários BDD e 5 testes do validador**, sem falhas, erros ou testes ignorados. Foram cobertas com sucesso **16/16 operações HTTP** contra a API e o SQL Server reais. O commit avaliado e os identificadores da execução constam em `execution.json`.
+
+O artifact do CI contém os relatórios, logs e capturas reais. Para gerar novamente o PDF, extraia o artifact em `artifacts/`, instale `reportlab` e `Pillow` em Python e disponibilize as fontes DejaVu em `/usr/share/fonts/truetype/dejavu/`. Execute `python3 scripts/bdd/build_pdf.py`. O PDF não é necessário para executar os testes.

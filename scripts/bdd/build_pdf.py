@@ -24,6 +24,7 @@ styles.add(ParagraphStyle(name='BodyBDD',fontName='Sans',fontSize=9.2,leading=14
 styles.add(ParagraphStyle(name='H1BDD',fontName='SansBold',fontSize=19,leading=24,spaceAfter=15,textColor=GREEN))
 styles.add(ParagraphStyle(name='H2BDD',fontName='SansBold',fontSize=11,leading=16,spaceBefore=10,spaceAfter=8,textColor=BLUE))
 styles.add(ParagraphStyle(name='SmallBDD',fontName='Sans',fontSize=7.6,leading=11,spaceAfter=7,textColor=BLUE))
+styles.add(ParagraphStyle(name='HeadBDD',fontName='SansBold',fontSize=7.6,leading=11,textColor=colors.white))
 styles.add(ParagraphStyle(name='CodeBDD',fontName='Mono',fontSize=6.8,leading=10,spaceAfter=12,backColor=PALE,borderPadding=8))
 styles.add(ParagraphStyle(name='CoverBDD',fontName='SansBold',fontSize=33,leading=40,spaceAfter=16,textColor=BLUE))
 W=475
@@ -37,18 +38,23 @@ def code(text,width=110):
         lines.extend(textwrap.wrap(line,width=width,replace_whitespace=False,drop_whitespace=False,subsequent_indent='    ') or [''])
     story.append(Preformatted('\n'.join(lines),styles['CodeBDD']))
 def table(rows,widths):
-    rows=[[Paragraph(escape(str(c)),styles['SmallBDD']) for c in row] for row in rows]
+    rows=[[Paragraph(escape(str(c)),styles['HeadBDD' if i==0 else 'SmallBDD']) for c in row] for i,row in enumerate(rows)]
     t=Table(rows,colWidths=widths,repeatRows=1,hAlign='LEFT')
     t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),BLUE),('TEXTCOLOR',(0,0),(-1,0),colors.white),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,PALE]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),5),('LINEBELOW',(0,0),(-1,0),1,GREEN)]))
-    for cell in rows[0]:cell.style=ParagraphStyle(name='th',parent=styles['SmallBDD'],fontName='SansBold',textColor=colors.white)
     story.append(t)
 def shot(file,caption,maxheight=360):
     path=EVIDENCE/'screenshots'/file
     if not path.exists():raise FileNotFoundError(path)
-    from PIL import Image as PI
-    with PI.open(path) as im:w,h=im.size
+    from PIL import Image as PI, ImageChops
+    from io import BytesIO
+    with PI.open(path) as im:
+        # Remove only the empty browser viewport below source/log text. Raw CI captures remain intact.
+        if file != 'cucumber-report.png':
+            bbox=ImageChops.difference(im.convert('RGB'),PI.new('RGB',im.size,im.getpixel((0,0))[:3])).getbbox()
+            if bbox:im=im.crop((0,0,im.width,min(im.height,bbox[3]+30)))
+        w,h=im.size;buffer=BytesIO();im.save(buffer,format='PNG');buffer.seek(0)
     scale=min(W/w,maxheight/h)
-    story.append(Image(str(path),width=w*scale,height=h*scale,hAlign='LEFT'))
+    story.append(Image(buffer,width=w*scale,height=h*scale,hAlign='LEFT'))
     p(caption,'SmallBDD')
 def page(canvas,doc):
     canvas.saveState();canvas.setFillColor(GREEN);canvas.rect(0,817,595,25,fill=1,stroke=0)
